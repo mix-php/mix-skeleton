@@ -1,6 +1,6 @@
 {
   "name": "mix/mix-skeleton",
-  "description": "基于 Swoole 4.4+ 单线程协程 PHP 框架 / Single-threaded coroutine PHP framework (http://mixphp.cn)",
+  "description": "全功能开发骨架 / Full-featured development skeleton (http://mixphp.cn)",
   "type": "project",
   "keywords": [
     "framework",
