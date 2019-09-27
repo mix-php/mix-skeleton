@@ -47,7 +47,7 @@ class StartCommand
     {
         $this->log      = context()->get('log');
         $this->server   = context()->get('udpServer');
-        $this->sendChan = new Channel(5);
+        $this->sendChan = new Channel();
         $this->init();
     }
 

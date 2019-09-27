@@ -51,7 +51,7 @@ class WebSocketHandler
     public function __construct(Connection $conn)
     {
         $this->conn           = $conn;
-        $this->sendChan       = new Channel(5);
+        $this->sendChan       = new Channel();
         $this->sessionStorage = new SessionStorage();
         $this->init();
     }

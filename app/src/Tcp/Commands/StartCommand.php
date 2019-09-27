@@ -2,6 +2,7 @@
 
 namespace App\Tcp\Commands;
 
+use App\Tcp\Libraries\CloseConnection;
 use Mix\Concurrent\Coroutine\Channel;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
@@ -120,7 +121,7 @@ class StartCommand
     public function handle(Connection $conn)
     {
         // 消息发送
-        $sendChan = new Channel(5);
+        $sendChan = new Channel();
         xdefer(function () use ($sendChan) {
             $sendChan->close();
         });
@@ -129,6 +130,10 @@ class StartCommand
                 $data = $sendChan->pop();
                 if (!$data) {
                     return;
+                }
+                if ($data instanceof CloseConnection) {
+                    $conn->close();
+                    continue;
                 }
                 $conn->send($data);
             }
