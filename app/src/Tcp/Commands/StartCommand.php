@@ -168,7 +168,7 @@ class StartCommand
             return;
         }
         if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
-            SendHelper::error($sendChan, -32700, 'Parse error');
+            SendHelper::error($sendChan, -32700, 'Parse error', $data['id'] ?? null);
             return;
         }
         // 定义变量
