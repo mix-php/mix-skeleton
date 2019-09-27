@@ -40,7 +40,7 @@ class StartCommand
     /**
      * EOF
      */
-    const EOF = "\r\n";
+    const EOF = "\n";
 
     /**
      * StartCommand constructor.
