@@ -34,7 +34,7 @@ class StartCommand
      * @var callable[]
      */
     public $methods = [
-        'hello.world' => [\App\Tcp\Controllers\HelloController::class, 'world'],
+        'foo.bar' => [\App\Tcp\Controllers\FooController::class, 'bar'],
     ];
 
     /**

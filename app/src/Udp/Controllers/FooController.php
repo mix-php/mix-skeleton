@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tcp\Controllers;
+namespace App\Udp\Controllers;
 
 /**
  * Class HelloController
- * @package App\Tcp\Controllers
+ * @package App\Udp\Controllers
  * @author liu,jian <coder.keda@gmail.com>
  */
-class HelloController
+class FooController
 {
 
     /**
@@ -15,7 +15,7 @@ class HelloController
      * @param $params
      * @return array
      */
-    public function world($params)
+    public function bar($params)
     {
         return [
             'Hello, World!',
