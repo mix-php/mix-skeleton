@@ -15,11 +15,11 @@ class SendHelper
     /**
      * Send error
      * @param Channel $sendChan
-     * @param $code
-     * @param $message
+     * @param int $code
+     * @param string $message
      * @param null $id
      */
-    public static function error(Channel $sendChan, $code, $message, $id = null)
+    public static function error(Channel $sendChan, int $code, string  $message, $id = null)
     {
         $data = JsonRpcHelper::error($code, $message, $id);
         $sendChan->push($data);
@@ -40,10 +40,10 @@ class SendHelper
     /**
      * Send notification
      * @param Channel $sendChan
+     * @param string $method
      * @param $result
-     * @param null $id
      */
-    public static function notification(Channel $sendChan, $method, $result)
+    public static function notification(Channel $sendChan, string $method, $result)
     {
         $data = JsonRpcHelper::notification($method, $result);
         $sendChan->push($data);

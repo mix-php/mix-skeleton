@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Tcp\Helpers;
+namespace App\Udp\Helpers;
 
-use App\Tcp\Commands\StartCommand;
 use Mix\Helper\JsonHelper;
 
 /**
  * Class JsonRpcHelper
- * @package App\Tcp\Helpers
+ * @package App\Udp\Helpers
  * @author liu,jian <coder.keda@gmail.com>
  */
 class JsonRpcHelper
@@ -15,8 +14,8 @@ class JsonRpcHelper
 
     /**
      * Error
-     * @param int $code
-     * @param string $message
+     * @param $code
+     * @param $message
      * @param null $id
      * @return string
      */
@@ -30,7 +29,7 @@ class JsonRpcHelper
             ],
             'id'      => $id,
         ];
-        return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE). StartCommand::EOF;
+        return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -47,24 +46,7 @@ class JsonRpcHelper
             'result'  => $result,
             'id'      => $id,
         ];
-        return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE). StartCommand::EOF;
-    }
-
-    /**
-     * Notification
-     * @param string $method
-     * @param $result
-     * @return string
-     */
-    public static function notification(string $method, array $params)
-    {
-        $data = [
-            'jsonrpc' => '2.0',
-            'method'  => $method,
-            'params'  => $params,
-            'id'      => null,
-        ];
-        return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE). StartCommand::EOF;
+        return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
     }
 
 }

@@ -2,6 +2,9 @@
 
 namespace App\Udp\Commands;
 
+use App\Udp\Exceptions\ExecutionException;
+use App\Udp\Helpers\SendHelper;
+use Mix\Concurrent\Coroutine\Channel;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
@@ -9,7 +12,7 @@ use Mix\Udp\Server\UdpServer;
 
 /**
  * Class StartCommand
- * @package App\Tcp\Commands
+ * @package App\Udp\Commands
  * @author liu,jian <coder.keda@gmail.com>
  */
 class StartCommand
@@ -26,12 +29,38 @@ class StartCommand
     public $log;
 
     /**
+     * @var Channel
+     */
+    public $sendChan;
+
+    /**
+     * @var callable[]
+     */
+    public $methods = [
+        'hello.world' => [\App\Udp\Controllers\HelloController::class, 'world'],
+    ];
+
+    /**
      * StartCommand constructor.
      */
     public function __construct()
     {
-        $this->log    = context()->get('log');
-        $this->server = context()->get('udpServer');
+        $this->log      = context()->get('log');
+        $this->server   = context()->get('udpServer');
+        $this->sendChan = new Channel(5);
+        $this->init();
+    }
+
+    /**
+     * 初始化
+     */
+    public function init()
+    {
+        // 实例化控制器
+        foreach ($this->methods as $method => $callback) {
+            list($class, $action) = $callback;
+            $this->methods[$method] = [new $class, $action];
+        }
     }
 
     /**
@@ -58,6 +87,7 @@ class StartCommand
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
             $this->log->info('server shutdown');
             $this->server->shutdown();
+            $this->sendChan->close();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 启动服务器
@@ -69,9 +99,21 @@ class StartCommand
      */
     public function start()
     {
+        // 消息发送
+        xgo(function () {
+            while (true) {
+                $res = $this->sendChan->pop();
+                if (!$res) {
+                    return;
+                }
+                list($data, $peer) = $res;
+                $this->server->swooleSocket->sendTo($peer['address'], $peer['port'], $data . "\n");
+            }
+        });
+        // 消息处理
         $server = $this->server;
         $server->handle(function (\Swoole\Coroutine\Socket $socket, string $data, array $peer) {
-            $this->handle($socket, $data, $peer);
+            $this->handle($this->sendChan, $data, $peer);
         });
         $this->welcome();
         $this->log->info('server start');
@@ -80,15 +122,39 @@ class StartCommand
 
     /**
      * 消息处理
-     * @param \Swoole\Coroutine\Socket $socket
+     * @param Channel $sendChan
      * @param string $data
      * @param array $peer
-     * @throws \Throwable
      */
-    public function handle(\Swoole\Coroutine\Socket $socket, string $data, array $peer)
+    public function handle(Channel $sendChan, string $data, array $peer)
     {
-        // 回复消息
-        $socket->sendTo($peer['address'], $peer['port'], "Receive successful!\n");
+        // 解析数据
+        $data = json_decode($data, true);
+        if (!$data) {
+            SendHelper::error($sendChan, $peer, -32600, 'Invalid Request');
+            return;
+        }
+        if (!isset($data['method']) || !isset($data['params']) || !isset($data['id'])) {
+            SendHelper::error($sendChan, $peer, -32700, 'Parse error');
+            return;
+        }
+        // 定义变量
+        $method = $data['method'];
+        $params = $data['params'];
+        $id     = $data['id'];
+        // 路由到控制器
+        if (!isset($this->methods[$method])) {
+            SendHelper::error($sendChan, $peer, -32601, 'Method not found', $id);
+            return;
+        }
+        // 执行
+        try {
+            $result = call_user_func($this->methods[$method], $params);
+        } catch (ExecutionException $exception) {
+            SendHelper::error($sendChan, $exception->getCode(), $exception->getMessage(), $id);
+            return;
+        }
+        SendHelper::result($sendChan, $peer, $result, $id);
     }
 
     /**

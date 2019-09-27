@@ -152,9 +152,9 @@ class StartCommand
     /**
      * 执行功能
      * @param Channel $sendChan
-     * @param $data
+     * @param string $data
      */
-    public function runAction(Channel $sendChan, $data)
+    public function runAction(Channel $sendChan, string $data)
     {
         // 解析数据
         $data = json_decode($data, true);
