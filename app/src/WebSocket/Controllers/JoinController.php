@@ -31,6 +31,11 @@ class JoinController
     public $joinRoomId;
 
     /**
+     * @var string
+     */
+    public $joinName;
+
+    /**
      * @var Channel
      */
     public $subChan;
@@ -67,8 +72,8 @@ class JoinController
     {
         // 验证数据
         $attributes = [
-            'roomId' => (string)array_shift($params),
-            'name'   => (string)array_shift($params),
+            'roomId' => array_shift($params),
+            'name'   => array_shift($params),
         ];
         $model      = new JoinForm($attributes);
         $model->setScenario('room');
@@ -139,8 +144,9 @@ class JoinController
                     $roomId,
                 ]);
                 $redis->publish("room_{$roomId}", $message);
-                // 保存当前房间
+                // 保存当前房间号和用户名称
                 $this->joinRoomId = $roomId;
+                $this->joinName   = $name;
                 // 订阅房间的频道
                 $this->subWaitChan->push(true); // 发送订阅执行
                 $channel = "room_{$roomId}";

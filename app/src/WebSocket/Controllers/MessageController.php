@@ -48,6 +48,7 @@ class MessageController
             $message = JsonRpcHelper::notification('message.update', [
                 $model->text,
                 $sessionStorage->joinController->joinRoomId,
+                $sessionStorage->joinController->joinName,
             ]);
             /** @var ConnectionPool $pool */
             $pool  = context()->get('redisPool');
