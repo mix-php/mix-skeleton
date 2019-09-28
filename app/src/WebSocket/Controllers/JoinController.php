@@ -30,7 +30,7 @@ class JoinController
      */
     public function __construct()
     {
-        $this->quitChannel = 'quit_' . md5(__FILE__);
+        $this->quitChannel = 'quit_' . spl_object_hash($this);
     }
 
     /**
@@ -65,7 +65,7 @@ class JoinController
                     $stop = $subStopChan->pop();
 
                     // 由于phpredis无新增订阅功能，又无法在其他协程close实例，因此使用publish消息的方法平滑关闭redis
-                    // 为避免与其他程序干扰，退出通道与类文件关联唯一
+                    // 为避免与其他程序干扰，退出通道与对象关联唯一
                     /** @var ConnectionPool $pool */
                     $pool  = context()->get('redisPool');
                     $redis = $pool->getConnection();

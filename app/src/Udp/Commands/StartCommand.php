@@ -41,6 +41,11 @@ class StartCommand
     ];
 
     /**
+     * EOF
+     */
+    const EOF = "\n";
+
+    /**
      * StartCommand constructor.
      */
     public function __construct()
@@ -107,7 +112,7 @@ class StartCommand
                     return;
                 }
                 list($data, $peer) = $res;
-                $this->server->swooleSocket->sendTo($peer['address'], $peer['port'], $data . "\n");
+                $this->server->swooleSocket->sendTo($peer['address'], $peer['port'], $data . static::EOF);
             }
         });
         // 消息处理
