@@ -2,7 +2,7 @@
 
 namespace App\Udp\Helpers;
 
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class SendHelper

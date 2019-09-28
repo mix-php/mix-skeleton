@@ -2,7 +2,7 @@
 
 namespace App\WebSocket\Controllers;
 
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 use Mix\Redis\Pool\ConnectionPool;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Forms\MessageForm;

@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\Workers\CoroutinePoolWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class CoroutinePoolCommand

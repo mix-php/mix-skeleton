@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 use Mix\Database\Pool\ConnectionPool;
 
 /**

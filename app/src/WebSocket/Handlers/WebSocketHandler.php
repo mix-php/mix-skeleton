@@ -2,7 +2,7 @@
 
 namespace App\WebSocket\Handlers;
 
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 use Mix\WebSocket\Connection;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveFailureException;

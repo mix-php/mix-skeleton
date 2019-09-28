@@ -3,7 +3,7 @@
 namespace App\Tcp\Commands;
 
 use App\Tcp\Libraries\CloseConnection;
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;

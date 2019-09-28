@@ -2,7 +2,7 @@
 
 namespace App\WebSocket\Libraries;
 
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class SessionStorage

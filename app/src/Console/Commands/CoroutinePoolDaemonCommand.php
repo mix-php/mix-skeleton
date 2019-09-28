@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Console\Workers\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
 use Mix\Console\CommandLine\Flag;
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 use Mix\Helper\ProcessHelper;
 use Mix\Redis\Pool\ConnectionPool;
 

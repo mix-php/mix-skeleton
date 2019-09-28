@@ -2,7 +2,7 @@
 
 namespace App\WebSocket\Helpers;
 
-use Mix\Concurrent\Coroutine\Channel;
+use Swoole\Coroutine\Channel;
 use Swoole\WebSocket\Frame;
 
 /**
