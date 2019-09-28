@@ -2,7 +2,7 @@
 
 namespace App\WebSocket\Libraries;
 
-use Swoole\Coroutine\Channel;
+use App\WebSocket\Controllers\JoinController;
 
 /**
  * Class SessionStorage
@@ -13,27 +13,20 @@ class SessionStorage
 {
 
     /**
-     * @var string
+     * @var JoinController
      */
-    public $joinRoomId;
-
-    /**
-     * @var Channel
-     */
-    public $subChan;
-
-    /**
-     * @var Channel
-     */
-    public $subStopChan;
+    public $joinController;
 
     /**
      * 清除
      */
     public function clear()
     {
-        $this->subChan and $this->subChan->close();
-        $this->subStopChan and $this->subStopChan->close();
+        if ($this->joinController) {
+            $this->joinController->subChan->close();
+            $this->joinController->subStopChan->close();
+            $this->joinController->subWaitChan->close();
+        }
     }
 
 }

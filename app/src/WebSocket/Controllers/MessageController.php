@@ -38,7 +38,7 @@ class MessageController
         }
 
         // 获取加入的房间id
-        if (empty($sessionStorage->joinRoomId)) {
+        if (empty($sessionStorage->joinController->joinRoomId)) {
             // 给当前连接发送消息
             throw new ExecutionException("You didn't join any room", 100002);
         }
@@ -47,12 +47,12 @@ class MessageController
         xgo(function () use ($model, $sessionStorage) {
             $message = JsonRpcHelper::notification('message.update', [
                 $model->text,
-                $sessionStorage->joinRoomId,
+                $sessionStorage->joinController->joinRoomId,
             ]);
             /** @var ConnectionPool $pool */
             $pool  = context()->get('redisPool');
             $redis = $pool->getConnection();
-            $redis->publish("room_{$sessionStorage->joinRoomId}", $message);
+            $redis->publish("room_{$sessionStorage->joinController->joinRoomId}", $message);
             $redis->release();
         });
 
