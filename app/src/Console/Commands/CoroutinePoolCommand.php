@@ -19,22 +19,20 @@ class CoroutinePoolCommand
      */
     public function main()
     {
-        xgo(function () {
-            $maxWorkers = 20;
-            $maxQueue   = 10;
-            $jobQueue   = new Channel($maxQueue);
-            $dispatch   = new Dispatcher([
-                'jobQueue'   => $jobQueue,
-                'maxWorkers' => $maxWorkers,
-            ]);
-            $dispatch->start(CoroutinePoolWorker::class);
-            // 投放任务
-            for ($i = 0; $i < 1000; $i++) {
-                $jobQueue->push($i);
-            }
-            // 停止
-            $dispatch->stop();
-        });
+        $maxWorkers = 20;
+        $maxQueue   = 10;
+        $jobQueue   = new Channel($maxQueue);
+        $dispatch   = new Dispatcher([
+            'jobQueue'   => $jobQueue,
+            'maxWorkers' => $maxWorkers,
+        ]);
+        $dispatch->start(CoroutinePoolWorker::class);
+        // 投放任务
+        for ($i = 0; $i < 1000; $i++) {
+            $jobQueue->push($i);
+        }
+        // 停止
+        $dispatch->stop();
     }
 
 }

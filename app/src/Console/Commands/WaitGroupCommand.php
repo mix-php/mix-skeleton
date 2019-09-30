@@ -17,15 +17,13 @@ class WaitGroupCommand
      */
     public function main()
     {
-        xgo(function () {
-            $wg = WaitGroup::new();
-            for ($i = 0; $i < 2; $i++) {
-                $wg->add(1);
-                xgo([$this, 'foo'], $wg);
-            }
-            $wg->wait();
-            println('all done!');
-        });
+        $wg = WaitGroup::new();
+        for ($i = 0; $i < 2; $i++) {
+            $wg->add(1);
+            xgo([$this, 'foo'], $wg);
+        }
+        $wg->wait();
+        println('all done!');
     }
 
     /**

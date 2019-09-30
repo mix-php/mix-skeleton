@@ -43,34 +43,32 @@ class CoroutinePoolDaemonCommand
         $redisPool = context()->get('redisPool');
         $redis     = $redisPool->getConnection();
         // 协程池执行任务
-        xgo(function () use ($redis) {
-            $maxWorkers = 20;
-            $maxQueue   = 20;
-            $jobQueue   = new Channel($maxQueue);
-            $dispatch   = new Dispatcher([
-                'jobQueue'   => $jobQueue,
-                'maxWorkers' => $maxWorkers,
-            ]);
-            $dispatch->start(CoroutinePoolDaemonWorker::class);
-            // 投放任务
-            while (true) {
-                if ($this->quit) {
-                    $dispatch->stop();
-                    return;
-                }
-                try {
-                    $data = $redis->brPop(['test'], 3);
-                } catch (\Throwable $e) {
-                    $dispatch->stop();
-                    return;
-                }
-                if (!$data) {
-                    continue;
-                }
-                $data = array_pop($data); // brPop命令最后一个键才是值
-                $jobQueue->push($data);
+        $maxWorkers = 20;
+        $maxQueue   = 20;
+        $jobQueue   = new Channel($maxQueue);
+        $dispatch   = new Dispatcher([
+            'jobQueue'   => $jobQueue,
+            'maxWorkers' => $maxWorkers,
+        ]);
+        $dispatch->start(CoroutinePoolDaemonWorker::class);
+        // 投放任务
+        while (true) {
+            if ($this->quit) {
+                $dispatch->stop();
+                return;
             }
-        });
+            try {
+                $data = $redis->brPop(['test'], 3);
+            } catch (\Throwable $e) {
+                $dispatch->stop();
+                return;
+            }
+            if (!$data) {
+                continue;
+            }
+            $data = array_pop($data); // brPop命令最后一个键才是值
+            $jobQueue->push($data);
+        }
     }
 
 }

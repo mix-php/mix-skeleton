@@ -18,17 +18,15 @@ class CoroutineCommand
      */
     public function main()
     {
-        xgo(function () {
-            $time = time();
-            $chan = new Channel();
-            for ($i = 0; $i < 2; $i++) {
-                xgo([$this, 'foo'], $chan);
-            }
-            for ($i = 0; $i < 2; $i++) {
-                $result = $chan->pop();
-            }
-            println(sprintf('Time: %ds', (time() - $time)));
-        });
+        $time = time();
+        $chan = new Channel();
+        for ($i = 0; $i < 2; $i++) {
+            xgo([$this, 'foo'], $chan);
+        }
+        for ($i = 0; $i < 2; $i++) {
+            $result = $chan->pop();
+        }
+        println(sprintf('Time: %ds', (time() - $time)));
     }
 
     /**
