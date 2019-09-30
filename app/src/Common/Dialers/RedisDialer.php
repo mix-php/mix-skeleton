@@ -3,7 +3,7 @@
 namespace App\Common\Dialers;
 
 use Mix\Pool\DialerInterface;
-use Mix\Redis\Coroutine\Connection;
+use Mix\Redis\Connection;
 
 /**
  * Class RedisDialer

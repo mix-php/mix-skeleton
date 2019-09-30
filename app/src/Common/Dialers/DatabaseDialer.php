@@ -2,7 +2,7 @@
 
 namespace App\Common\Dialers;
 
-use Mix\Database\Coroutine\Connection;
+use Mix\Database\Connection;
 use Mix\Pool\DialerInterface;
 
 /**

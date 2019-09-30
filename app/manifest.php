@@ -243,7 +243,7 @@ return [
         // Database
         [
             // 类路径
-            'class'      => \Mix\Database\Coroutine\Connection::class,
+            'class'      => \Mix\Database\Connection::class,
             // 初始化方法
             'initMethod' => 'connect',
             // 属性注入
@@ -269,7 +269,7 @@ return [
         // Redis
         [
             // 类路径
-            'class'      => \Mix\Redis\Coroutine\Connection::class,
+            'class'      => \Mix\Redis\Connection::class,
             // 初始化方法
             'initMethod' => 'connect',
             // 属性注入

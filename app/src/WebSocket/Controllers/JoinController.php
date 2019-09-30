@@ -4,7 +4,7 @@ namespace App\WebSocket\Controllers;
 
 use Swoole\Coroutine\Channel;
 use Swoole\WebSocket\Frame;
-use Mix\Redis\Coroutine\Connection;
+use Mix\Redis\Connection;
 use Mix\Redis\Pool\ConnectionPool;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Helpers\JsonRpcHelper;
