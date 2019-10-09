@@ -29,7 +29,6 @@ class RedisListener implements ListenerInterface
     /**
      * 处理事件
      * @param object $event
-     * @return mixed|void
      */
     public function process(object $event)
     {
