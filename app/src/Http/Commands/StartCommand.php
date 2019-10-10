@@ -90,6 +90,9 @@ class StartCommand
         $server->handle('/', function (ServerRequest $request, Response $response) {
             $this->handle($request, $response);
         });
+        $server->set([
+            //...
+        ]);
         $this->welcome();
         $this->log->info('server start');
         $server->start();
