@@ -37,11 +37,6 @@ class StartCommand
     public $route;
 
     /**
-     * @var string
-     */
-    public $localIp;
-
-    /**
      * StartCommand constructor.
      */
     public function __construct()
