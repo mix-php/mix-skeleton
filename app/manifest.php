@@ -244,8 +244,6 @@ return [
         [
             // 类路径
             'class'      => \Mix\Database\Connection::class,
-            // 初始化方法
-            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 数据源格式
@@ -270,8 +268,6 @@ return [
         [
             // 类路径
             'class'      => \Mix\Redis\Connection::class,
-            // 初始化方法
-            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 主机
