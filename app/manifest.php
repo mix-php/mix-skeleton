@@ -349,8 +349,6 @@ return [
             'name'       => 'route',
             // 类路径
             'class'      => \Mix\Route\Router::class,
-            // 初始化方法
-            'initMethod' => 'parse',
             // 属性注入
             'properties' => [
                 // 默认变量规则
@@ -415,8 +413,6 @@ return [
             'name'       => 'session',
             // 类路径
             'class'      => \Mix\Session\Session::class,
-            // 初始化方法
-            'initMethod' => 'start',
             // 属性注入
             'properties' => [
                 // 处理器
