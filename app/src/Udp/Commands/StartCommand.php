@@ -112,7 +112,7 @@ class StartCommand
                     return;
                 }
                 list($data, $peer) = $res;
-                $this->server->swooleSocket->sendTo($peer['address'], $peer['port'], $data . static::EOF);
+                $this->server->sendTo($peer['address'], $peer['port'], $data . static::EOF);
             }
         });
         // 消息处理
@@ -120,9 +120,6 @@ class StartCommand
         $server->handle(function (\Swoole\Coroutine\Socket $socket, string $data, array $peer) {
             $this->handle($this->sendChan, $data, $peer);
         });
-        $server->set([
-            //...
-        ]);
         $this->welcome();
         $this->log->info('server start');
         $server->start();
