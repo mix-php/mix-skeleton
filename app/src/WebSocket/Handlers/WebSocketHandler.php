@@ -5,7 +5,7 @@ namespace App\WebSocket\Handlers;
 use Swoole\Coroutine\Channel;
 use Mix\WebSocket\Connection;
 use Mix\WebSocket\Exception\CloseFrameException;
-use Mix\WebSocket\Exception\ReceiveFailureException;
+use Mix\WebSocket\Exception\ReceiveException;
 use App\WebSocket\Controllers\JoinController;
 use App\WebSocket\Controllers\MessageController;
 use App\WebSocket\Exceptions\ExecutionException;
@@ -95,7 +95,7 @@ class WebSocketHandler
                 // 销毁
                 $this->destroy();
                 // 忽略服务器主动断开连接异常
-                if ($e instanceof ReceiveFailureException && $e->getCode() == 104) {
+                if ($e instanceof ReceiveException && $e->getCode() == 104) {
                     return;
                 }
                 // 忽略客户端主动断开连接异常

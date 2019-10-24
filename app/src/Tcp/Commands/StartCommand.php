@@ -8,7 +8,7 @@ use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
 use Mix\Server\Connection;
-use Mix\Server\Exception\ReceiveFailureException;
+use Mix\Server\Exception\ReceiveException;
 use Mix\Server\Server;
 use App\Tcp\Exceptions\ExecutionException;
 use App\Tcp\Helpers\SendHelper;
@@ -135,7 +135,12 @@ class StartCommand
                     $conn->close();
                     continue;
                 }
-                $conn->send($data);
+                try {
+                    $conn->send($data);
+                } catch (\Throwable $e) {
+                    $conn->close();
+                    throw $e;
+                }
             }
         });
         // 消息读取
@@ -144,7 +149,7 @@ class StartCommand
                 $data = $conn->recv();
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
-                if ($e instanceof ReceiveFailureException && $e->getCode() == 104) {
+                if ($e instanceof ReceiveException && $e->getCode() == 104) {
                     return;
                 }
                 // 抛出异常
