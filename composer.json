@@ -26,6 +26,7 @@
     "mix/event": "v2.1.0-RC",
     "mix/database": "v2.1.0-RC",
     "mix/redis": "v2.1.0-RC",
+    "mix/redis-subscriber": "v2.1.0-RC",
     "mix/cache": "v2.1.0-RC",
     "mix/auth": "v2.1.0-RC",
     "mix/session": "v2.1.0-RC",
