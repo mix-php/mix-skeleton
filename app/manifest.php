@@ -244,6 +244,8 @@ return [
         [
             // 类路径
             'class'      => \Mix\Database\Connection::class,
+            // 初始方法
+            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 数据源格式
@@ -268,6 +270,8 @@ return [
         [
             // 类路径
             'class'      => \Mix\Redis\Connection::class,
+            // 初始方法
+            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 主机
@@ -349,6 +353,8 @@ return [
             'name'       => 'route',
             // 类路径
             'class'      => \Mix\Route\Router::class,
+            // 初始方法
+            'initMethod' => 'parse',
             // 属性注入
             'properties' => [
                 // 默认变量规则
@@ -413,6 +419,8 @@ return [
             'name'       => 'session',
             // 类路径
             'class'      => \Mix\Session\Session::class,
+            // 初始方法
+            'initMethod' => 'start',
             // 属性注入
             'properties' => [
                 // 处理器
