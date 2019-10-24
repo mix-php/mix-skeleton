@@ -84,7 +84,12 @@ class WebSocketHandler
                     $this->conn->close();
                     continue;
                 }
-                $this->conn->send($frame);
+                try {
+                    $this->conn->send($frame);
+                } catch (\Throwable $e) {
+                    $this->conn->close();
+                    throw $e;
+                }
             }
         });
         // 消息读取

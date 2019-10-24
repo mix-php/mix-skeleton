@@ -111,8 +111,13 @@ class StartCommand
                 if (!$res) {
                     return;
                 }
-                list($data, $peer) = $res;
-                $this->server->sendTo($peer['address'], $peer['port'], $data . static::EOF);
+                try {
+                    list($data, $peer) = $res;
+                    $this->server->sendTo($peer['address'], $peer['port'], $data . static::EOF);
+                } catch (\Throwable $e) {
+                    $this->server->shutdown();
+                    throw $e;
+                }
             }
         });
         // 消息处理
