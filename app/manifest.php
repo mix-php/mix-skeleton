@@ -480,6 +480,8 @@ return [
             'class'           => \Mix\Udp\Server\UdpServer::class,
             // 构造函数注入
             'constructorArgs' => [
+                // domain
+                AF_INET,
                 // address
                 '127.0.0.1',
                 // port
