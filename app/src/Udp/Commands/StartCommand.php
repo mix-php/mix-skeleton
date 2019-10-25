@@ -113,7 +113,7 @@ class StartCommand
                 }
                 try {
                     list($data, $peer) = $res;
-                    $this->server->sendTo($peer['address'], $peer['port'], $data . static::EOF);
+                    $this->server->send($data . static::EOF, $peer['port'], $peer['address']);
                 } catch (\Throwable $e) {
                     $this->server->shutdown();
                     throw $e;

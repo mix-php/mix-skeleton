@@ -480,7 +480,7 @@ return [
             'class'           => \Mix\Udp\Server\UdpServer::class,
             // 构造函数注入
             'constructorArgs' => [
-                // host
+                // address
                 '127.0.0.1',
                 // port
                 9504,
