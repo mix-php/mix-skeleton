@@ -22,10 +22,8 @@ class SessionStorage
      */
     public function clear()
     {
-        if ($this->joinController) {
-            $this->joinController->subChan->close();
-            $this->joinController->subStopChan->close();
-            $this->joinController->subWaitChan->close();
+        if (isset($this->joinController->subscriber)) {
+            $this->joinController->subscriber->close();
         }
     }
 

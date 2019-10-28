@@ -2,7 +2,6 @@
 
 namespace App\WebSocket\Controllers;
 
-use Swoole\Coroutine\Channel;
 use Mix\Redis\Pool\ConnectionPool;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Forms\MessageForm;
@@ -19,12 +18,11 @@ class MessageController
 
     /**
      * 发送消息
-     * @param Channel $sendChan
      * @param SessionStorage $sessionStorage
      * @param $params
      * @return array
      */
-    public function emit(Channel $sendChan, SessionStorage $sessionStorage, $params)
+    public function emit(SessionStorage $sessionStorage, $params)
     {
         // 使用模型
         $attributes = [
