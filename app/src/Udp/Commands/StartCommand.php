@@ -122,7 +122,7 @@ class StartCommand
         });
         // 消息处理
         $server = $this->server;
-        $server->handle(function (\Swoole\Coroutine\Socket $socket, string $data, array $peer) {
+        $server->handle(function (string $data, array $peer) {
             $this->handle($this->sendChan, $data, $peer);
         });
         $this->welcome();

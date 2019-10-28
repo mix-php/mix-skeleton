@@ -2,7 +2,6 @@
 
 namespace App\Tcp\Commands;
 
-use App\Tcp\Libraries\CloseConnection;
 use Swoole\Coroutine\Channel;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
@@ -12,6 +11,7 @@ use Mix\Server\Exception\ReceiveException;
 use Mix\Server\Server;
 use App\Tcp\Exceptions\ExecutionException;
 use App\Tcp\Helpers\SendHelper;
+use App\Tcp\Libraries\CloseConnection;
 
 /**
  * Class StartCommand
@@ -147,6 +147,7 @@ class StartCommand
         while (true) {
             try {
                 $data = $conn->recv();
+                $this->runAction($sendChan, $data);
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
                 if ($e instanceof ReceiveException && $e->getCode() == 104) {
@@ -155,7 +156,6 @@ class StartCommand
                 // 抛出异常
                 throw $e;
             }
-            $this->runAction($sendChan, $data);
         }
     }
 

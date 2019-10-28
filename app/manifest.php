@@ -289,6 +289,23 @@ return [
             ],
         ],
 
+        // Redis订阅器
+        [
+            // 类路径
+            'class'      => \Mix\Redis\Subscribe\Subscriber::class,
+            // 属性注入
+            'properties' => [
+                // 主机
+                'host'     => getenv('REDIS_HOST'),
+                // 端口
+                'port'     => getenv('REDIS_PORT'),
+                // 密码
+                'password' => getenv('REDIS_PASSWORD'),
+                // 超时
+                'timeout'  => 5,
+            ],
+        ],
+
         // 缓存
         [
             // 名称

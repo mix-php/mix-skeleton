@@ -96,8 +96,9 @@ class WebSocketHandler
         while (true) {
             try {
                 $frame = $this->conn->recv();
+                $this->runAction($frame->data);
             } catch (\Throwable $e) {
-                // 销毁
+                // 销毁资源
                 $this->destroy();
                 // 忽略服务器主动断开连接异常
                 if ($e instanceof ReceiveException && $e->getCode() == 104) {
@@ -110,7 +111,6 @@ class WebSocketHandler
                 // 抛出异常
                 throw $e;
             }
-            $this->runAction($frame->data);
         }
     }
 
@@ -141,7 +141,7 @@ class WebSocketHandler
         }
         // 执行
         try {
-            $result = call_user_func($this->methods[$method], $this->sendChan, $this->sessionStorage, $params);
+            $result = call_user_func($this->methods[$method], $this->sessionStorage, $params);
         } catch (ExecutionException $exception) {
             SendHelper::error($this->sendChan, $exception->getCode(), $exception->getMessage(), $id);
             return;
@@ -150,11 +150,10 @@ class WebSocketHandler
     }
 
     /**
-     * 销毁
+     * 销毁资源
      */
     public function destroy()
     {
-        // TODO: Implement __destruct() method.
         $this->sendChan->close();
         $this->sessionStorage->clear();
     }
