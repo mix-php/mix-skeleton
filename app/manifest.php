@@ -293,6 +293,8 @@ return [
         [
             // 类路径
             'class'      => \Mix\Redis\Subscribe\Subscriber::class,
+            // 初始方法
+            'initMethod' => 'connect',
             // 属性注入
             'properties' => [
                 // 主机

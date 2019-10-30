@@ -6,7 +6,7 @@ use Mix\Redis\Pool\ConnectionPool;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Forms\MessageForm;
 use App\WebSocket\Helpers\JsonRpcHelper;
-use App\WebSocket\Libraries\SessionStorage;
+use App\WebSocket\Libraries\Session;
 
 /**
  * Class MessageController
@@ -18,11 +18,11 @@ class MessageController
 
     /**
      * 发送消息
-     * @param SessionStorage $sessionStorage
+     * @param Session $session
      * @param $params
      * @return array
      */
-    public function emit(SessionStorage $sessionStorage, $params)
+    public function emit(Session $session, $params)
     {
         // 使用模型
         $attributes = [
@@ -36,22 +36,22 @@ class MessageController
         }
 
         // 获取加入的房间id
-        if (empty($sessionStorage->joinController->joinRoomId)) {
+        if (empty($session->joinRoomId)) {
             // 给当前连接发送消息
             throw new ExecutionException("You didn't join any room", 100002);
         }
 
         // 给当前加入的房间发送消息
-        xgo(function () use ($model, $sessionStorage) {
+        xgo(function () use ($model, $session) {
             $message = JsonRpcHelper::notification('message.update', [
                 $model->text,
-                $sessionStorage->joinController->joinRoomId,
-                $sessionStorage->joinController->joinName,
+                $session->joinRoomId,
+                $session->joinName,
             ]);
             /** @var ConnectionPool $pool */
             $pool  = context()->get('redisPool');
             $redis = $pool->getConnection();
-            $redis->publish("room_{$sessionStorage->joinController->joinRoomId}", $message);
+            $redis->publish("room_{$session->joinRoomId}", $message);
             $redis->release();
         });
 

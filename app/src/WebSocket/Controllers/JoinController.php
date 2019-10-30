@@ -3,11 +3,13 @@
 namespace App\WebSocket\Controllers;
 
 use Mix\Redis\Pool\ConnectionPool;
+use Mix\Redis\Subscribe\Message;
 use Mix\Redis\Subscribe\Subscriber;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Helpers\JsonRpcHelper;
 use App\WebSocket\Forms\JoinForm;
-use App\WebSocket\Libraries\SessionStorage;
+use App\WebSocket\Libraries\Session;
+use Swoole\WebSocket\Frame;
 
 /**
  * Class JoinController
@@ -18,35 +20,12 @@ class JoinController
 {
 
     /**
-     * @var string
-     */
-    public $joinRoomId;
-
-    /**
-     * @var string
-     */
-    public $joinName;
-
-    /**
-     * @var Subscriber
-     */
-    public $subscriber;
-
-    /**
-     * JoinController constructor.
-     */
-    public function __construct()
-    {
-        $this->subscriber = context()->get(Subscriber::class);
-    }
-
-    /**
      * 加入房间
-     * @param SessionStorage $sessionStorage
+     * @param Session $session
      * @param $params
      * @return array
      */
-    public function room(SessionStorage $sessionStorage, $params)
+    public function room(Session $session, $params)
     {
         // 验证数据
         $attributes = [
@@ -59,14 +38,38 @@ class JoinController
             throw new ExecutionException($model->getError(), 100001);
         }
 
+        // 创建订阅器
+        if (!isset($session->subscriber)) {
+            $session->subscriber = context()->get(Subscriber::class);
+            // 订阅消息处理
+            xgo(function () use ($session) {
+                $chan = $session->subscriber->channel();
+                while (true) {
+                    /** @var Message $message */
+                    $message = $chan->pop();
+                    if (empty($message)) {
+                        if (!$session->subscriber->closed) {
+                            // redis异常断开处理
+                            $session->clear();
+                        }
+                        return;
+                    }
+                    $frame         = new Frame();
+                    $frame->opcode = SWOOLE_WEBSOCKET_OPCODE_TEXT;
+                    $frame->data   = $message->payload;
+                    $session->sendChan->push($frame);
+                }
+            });
+        }
+
         // 订阅新的频道，取消之前的订阅
         try {
-            if ($this->joinRoomId) {
-                $this->subscriber->unsubscribe("room_{$this->joinRoomId}");
+            if ($session->joinRoomId) {
+                $session->subscriber->unsubscribe("room_{$session->joinRoomId}");
             }
-            $this->subscriber->subscribe("room_{$model->roomId}");
-            $this->joinRoomId = $model->roomId;
-            $this->joinName   = $model->name;
+            $session->subscriber->subscribe("room_{$model->roomId}");
+            $session->joinRoomId = $model->roomId;
+            $session->joinName   = $model->name;
         } catch (\Throwable $e) {
             // 订阅失败
             throw new ExecutionException($e->getMessage(), 100002);
@@ -74,7 +77,7 @@ class JoinController
 
         // 给其他订阅当前房间的连接发送加入消息
         /** @var ConnectionPool $redisPool */
-        $redisPool = context()->get(ConnectionPool::class);
+        $redisPool = context()->get('redisPool');
         $redis     = $redisPool->getConnection();
         $message   = JsonRpcHelper::notification('message.update', [
             sprintf('%s joined the room', $model->name),

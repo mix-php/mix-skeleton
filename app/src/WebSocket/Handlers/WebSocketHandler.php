@@ -10,8 +10,7 @@ use App\WebSocket\Controllers\JoinController;
 use App\WebSocket\Controllers\MessageController;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Helpers\SendHelper;
-use App\WebSocket\Libraries\CloseConnection;
-use App\WebSocket\Libraries\SessionStorage;
+use App\WebSocket\Libraries\Session;
 
 /**
  * Class WebSocketHandler
@@ -32,9 +31,9 @@ class WebSocketHandler
     public $sendChan;
 
     /**
-     * @var SessionStorage
+     * @var Session
      */
-    public $sessionStorage;
+    public $session;
 
     /**
      * @var callable[]
@@ -50,9 +49,9 @@ class WebSocketHandler
      */
     public function __construct(Connection $conn)
     {
-        $this->conn           = $conn;
-        $this->sendChan       = new Channel();
-        $this->sessionStorage = new SessionStorage();
+        $this->conn     = $conn;
+        $this->sendChan = new Channel();
+        $this->session  = new Session($this->sendChan, $this->conn);
         $this->init();
     }
 
@@ -80,10 +79,6 @@ class WebSocketHandler
                 if (!$frame) {
                     return;
                 }
-                if ($frame instanceof CloseConnection) {
-                    $this->conn->close();
-                    continue;
-                }
                 try {
                     $this->conn->send($frame);
                 } catch (\Throwable $e) {
@@ -98,8 +93,8 @@ class WebSocketHandler
                 $frame = $this->conn->recv();
                 $this->runAction($frame->data);
             } catch (\Throwable $e) {
-                // 销毁资源
-                $this->destroy();
+                // 清理会话资源
+                $this->session->clear();
                 // 忽略服务器主动断开连接异常
                 if ($e instanceof ReceiveException && $e->getCode() == 104) {
                     return;
@@ -141,21 +136,12 @@ class WebSocketHandler
         }
         // 执行
         try {
-            $result = call_user_func($this->methods[$method], $this->sessionStorage, $params);
+            $result = call_user_func($this->methods[$method], $this->session, $params);
         } catch (ExecutionException $exception) {
             SendHelper::error($this->sendChan, $exception->getCode(), $exception->getMessage(), $id);
             return;
         }
         SendHelper::result($this->sendChan, $result, $id);
-    }
-
-    /**
-     * 销毁资源
-     */
-    public function destroy()
-    {
-        $this->sendChan->close();
-        $this->sessionStorage->clear();
     }
 
 }
