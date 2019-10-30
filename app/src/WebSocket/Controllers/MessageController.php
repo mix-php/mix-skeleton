@@ -6,7 +6,7 @@ use Mix\Redis\Pool\ConnectionPool;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Forms\MessageForm;
 use App\WebSocket\Helpers\JsonRpcHelper;
-use App\WebSocket\Libraries\Session;
+use App\WebSocket\Session\Session;
 
 /**
  * Class MessageController

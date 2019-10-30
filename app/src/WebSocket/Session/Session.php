@@ -1,6 +1,6 @@
 <?php
 
-namespace App\WebSocket\Libraries;
+namespace App\WebSocket\Session;
 
 use Mix\Redis\Subscribe\Subscriber;
 use Mix\WebSocket\Connection;
@@ -8,7 +8,7 @@ use Swoole\Coroutine\Channel;
 
 /**
  * Class Session
- * @package App\WebSocket\Libraries
+ * @package App\WebSocket\Session
  * @author liu,jian <coder.keda@gmail.com>
  */
 class Session

@@ -10,7 +10,7 @@ use App\WebSocket\Controllers\JoinController;
 use App\WebSocket\Controllers\MessageController;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Helpers\SendHelper;
-use App\WebSocket\Libraries\Session;
+use App\WebSocket\Session\Session;
 
 /**
  * Class WebSocketHandler

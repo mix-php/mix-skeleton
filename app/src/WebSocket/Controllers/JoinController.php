@@ -8,7 +8,7 @@ use Mix\Redis\Subscribe\Subscriber;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Helpers\JsonRpcHelper;
 use App\WebSocket\Forms\JoinForm;
-use App\WebSocket\Libraries\Session;
+use App\WebSocket\Session\Session;
 use Swoole\WebSocket\Frame;
 
 /**
