@@ -38,7 +38,7 @@ class MessageController
         // 获取加入的房间id
         if (empty($session->joinRoomId)) {
             // 给当前连接发送消息
-            throw new ExecutionException("You didn't join any room", 100002);
+            throw new ExecutionException("You didn't join any room", 100003);
         }
 
         // 给当前加入的房间发送消息
