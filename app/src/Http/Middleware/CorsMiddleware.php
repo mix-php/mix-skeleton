@@ -48,7 +48,6 @@ class CorsMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // TODO: Implement process() method.
         // 跨域处理
         $response = $this->response;
         if ($request->getMethod() == 'OPTIONS') {

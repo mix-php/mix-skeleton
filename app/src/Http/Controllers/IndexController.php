@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Helpers\SendHelper;
+use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
 
@@ -23,7 +23,7 @@ class IndexController
     public function index(ServerRequest $request, Response $response)
     {
         $content = 'Hello, World!';
-        return SendHelper::html($response, $content);
+        return ResponseHelper::html($response, $content);
     }
 
 }

@@ -9,11 +9,11 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\View\View;
 
 /**
- * Class SendHelper
+ * Class ResponseHelper
  * @package App\Http\Helpers
  * @author liu,jian <coder.keda@gmail.com>
  */
-class SendHelper
+class ResponseHelper
 {
 
     /**

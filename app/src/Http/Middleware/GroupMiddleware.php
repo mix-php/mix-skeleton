@@ -47,7 +47,6 @@ class GroupMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // TODO: Implement process() method.
         return $handler->handle($request);
     }
 

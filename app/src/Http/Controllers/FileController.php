@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Helpers\SendHelper;
+use App\Http\Helpers\ResponseHelper;
 use App\Http\Forms\FileForm;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
@@ -28,7 +28,7 @@ class FileController
         $form->setScenario('upload');
         if (!$form->validate()) {
             $content = ['code' => 1, 'message' => 'FAILED', 'data' => $form->getErrors()];
-            return SendHelper::json($response, $content);
+            return ResponseHelper::json($response, $content);
         }
 
         // 保存文件
@@ -39,7 +39,7 @@ class FileController
 
         // 响应
         $content = ['code' => 0, 'message' => 'OK'];
-        return SendHelper::json($response, $content);
+        return ResponseHelper::json($response, $content);
     }
 
 }

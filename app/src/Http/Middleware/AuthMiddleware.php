@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Helpers\SendHelper;
+use App\Http\Helpers\ResponseHelper;
 use Mix\Auth\Authorization;
 use Mix\Auth\BearerTokenExtractor;
 use Mix\Http\Message\Response;
@@ -56,7 +56,6 @@ class AuthMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // TODO: Implement process() method.
         // 权限验证
         $tokenExtractor = new BearerTokenExtractor($request);
         try {
@@ -64,7 +63,7 @@ class AuthMiddleware implements MiddlewareInterface
         } catch (\Throwable $e) {
             // 中断执行，返回错误信息
             $content  = ['code' => 100001, 'message' => 'No access'];
-            $response = SendHelper::json($this->response, $content);
+            $response = ResponseHelper::json($this->response, $content);
             return $response;
         }
 

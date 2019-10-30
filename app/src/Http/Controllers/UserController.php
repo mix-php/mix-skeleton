@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Forms\UserForm;
-use App\Http\Helpers\SendHelper;
+use App\Http\Helpers\ResponseHelper;
 use App\Http\Models\UserModel;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
@@ -29,7 +29,7 @@ class UserController
         $form->setScenario('create');
         if (!$form->validate()) {
             $content = ['code' => 1, 'message' => 'FAILED', 'data' => $form->getErrors()];
-            return SendHelper::json($response, $content);
+            return ResponseHelper::json($response, $content);
         }
 
         // 执行保存数据库
@@ -37,7 +37,7 @@ class UserController
 
         // 响应
         $content = ['code' => 0, 'message' => 'OK'];
-        return SendHelper::json($response, $content);
+        return ResponseHelper::json($response, $content);
     }
 
 }

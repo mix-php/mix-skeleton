@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Helpers\SendHelper;
+use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 
@@ -28,7 +28,7 @@ class ProfileController
             'age'     => 18,
             'friends' => ['小红', '小花', '小飞'],
         ];
-        return SendHelper::view($response, 'profile.index', $data);
+        return ResponseHelper::view($response, 'profile.index', $data);
     }
 
 }

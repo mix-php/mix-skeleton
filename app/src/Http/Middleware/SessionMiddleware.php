@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Helpers\SendHelper;
+use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Middleware\MiddlewareInterface;
@@ -59,13 +59,12 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // TODO: Implement process() method.
         // 会话验证
         $payload = $this->session->get('payload');
         if (!$payload) {
             // 中断执行，返回错误信息
             $content  = ['code' => 100001, 'message' => 'No access'];
-            $response = SendHelper::json($this->response, $content);
+            $response = ResponseHelper::json($this->response, $content);
             return $response;
         }
 
