@@ -11,7 +11,6 @@ use Mix\Server\Exception\ReceiveException;
 use Mix\Server\Server;
 use App\Tcp\Exceptions\ExecutionException;
 use App\Tcp\Helpers\SendHelper;
-use App\Tcp\Libraries\CloseConnection;
 
 /**
  * Class StartCommand
@@ -130,10 +129,6 @@ class StartCommand
                 $data = $sendChan->pop();
                 if (!$data) {
                     return;
-                }
-                if ($data instanceof CloseConnection) {
-                    $conn->close();
-                    continue;
                 }
                 try {
                     $conn->send($data);
