@@ -42,18 +42,16 @@ class MessageController
         }
 
         // 给当前加入的房间发送消息
-        xgo(function () use ($model, $session) {
-            $message = JsonRpcHelper::notification('message.update', [
-                $model->text,
-                $session->joinRoomId,
-                $session->joinName,
-            ]);
-            /** @var ConnectionPool $pool */
-            $pool  = context()->get('redisPool');
-            $redis = $pool->getConnection();
-            $redis->publish("room_{$session->joinRoomId}", $message);
-            $redis->release();
-        });
+        $message = JsonRpcHelper::notification('message.update', [
+            $model->text,
+            $session->joinRoomId,
+            $session->joinName,
+        ]);
+        /** @var ConnectionPool $pool */
+        $pool  = context()->get('redisPool');
+        $redis = $pool->getConnection();
+        $redis->publish("room_{$session->joinRoomId}", $message);
+        $redis->release();
 
         // 给当前连接发送消息
         return [
