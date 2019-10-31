@@ -87,6 +87,10 @@ class StartCommand
         if ($port) {
             $this->server->port = $port;
         }
+        $reusePort = Flag::bool(['r', 'reuse-port'], false);
+        if ($reusePort) {
+            $this->server->reusePort = $reusePort;
+        }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);

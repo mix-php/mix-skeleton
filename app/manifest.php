@@ -68,6 +68,7 @@ return [
                 [['d', 'daemon'], 'description' => "Run in the background"],
                 [['h', 'host'], 'description' => "Listen to the specified host"],
                 [['p', 'port'], 'description' => "Listen to the specified port"],
+                [['r', 'reuse-port'], 'description' => "Reuse port"],
             ],
         ],
 
@@ -79,6 +80,7 @@ return [
                 [['d', 'daemon'], 'description' => "Run in the background"],
                 [['h', 'host'], 'description' => "Listen to the specified host"],
                 [['p', 'port'], 'description' => "Listen to the specified port"],
+                [['r', 'reuse-port'], 'description' => "Reuse port"],
             ],
         ],
 
@@ -90,6 +92,7 @@ return [
                 [['d', 'daemon'], 'description' => "Run in the background"],
                 [['h', 'host'], 'description' => "Listen to the specified host"],
                 [['p', 'port'], 'description' => "Listen to the specified port"],
+                [['r', 'reuse-port'], 'description' => "Reuse port"],
             ],
         ],
 
@@ -101,6 +104,7 @@ return [
                 [['d', 'daemon'], 'description' => "Run in the background"],
                 [['h', 'host'], 'description' => "Listen to the specified host"],
                 [['p', 'port'], 'description' => "Listen to the specified port"],
+                [['r', 'reuse-port'], 'description' => "Reuse port"],
             ],
         ],
 
