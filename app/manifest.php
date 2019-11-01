@@ -500,7 +500,7 @@ return [
             // 名称
             'name'            => 'udpServer',
             // 类路径
-            'class'           => \Mix\Udp\Server\UdpServer::class,
+            'class'           => \App\Udp\Server\UdpServer::class,
             // 构造函数注入
             'constructorArgs' => [
                 // domain

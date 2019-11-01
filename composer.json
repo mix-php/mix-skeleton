@@ -34,7 +34,6 @@
     "mix/route": "v2.1.0-RC",
     "mix/view": "v2.1.0-RC",
     "mix/server": "v2.1.0-RC",
-    "mix/udp-server": "v2.1.0-RC",
     "mix/http-message": "v2.1.0-RC",
     "mix/http-server": "v2.1.0-RC",
     "mix/websocket": "v2.1.0-RC",
