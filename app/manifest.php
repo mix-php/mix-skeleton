@@ -432,7 +432,7 @@ return [
                 // 钥匙
                 'key'       => 'example_key',
                 // 签名算法
-                'algorithm' => \Mix\Auth\JWT::ALGORITHM_RS256,
+                'algorithm' => \Mix\Auth\JWT::ALGORITHM_HS256,
             ],
         ],
 
