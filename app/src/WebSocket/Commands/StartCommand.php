@@ -8,7 +8,7 @@ use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Log\Logger;
-use Mix\Http\Server\HttpServer;
+use Mix\Http\Server\Server;
 use Mix\WebSocket\Upgrader;
 
 /**
@@ -20,7 +20,7 @@ class StartCommand
 {
 
     /**
-     * @var HttpServer
+     * @var Server
      */
     public $server;
 

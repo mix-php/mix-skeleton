@@ -7,7 +7,7 @@ use Mix\Helper\ProcessHelper;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\ServerRequest;
 use Mix\Http\Message\Response;
-use Mix\Http\Server\HttpServer;
+use Mix\Http\Server\Server;
 use Mix\Http\Server\Middleware\MiddlewareDispatcher;
 use Mix\Log\Logger;
 use Mix\Route\Router;
@@ -22,7 +22,7 @@ class StartCommand
 {
 
     /**
-     * @var HttpServer
+     * @var Server
      */
     public $server;
 

@@ -358,7 +358,7 @@ return [
             // 名称
             'name'            => 'httpServer',
             // 类路径
-            'class'           => \Mix\Http\Server\HttpServer::class,
+            'class'           => \Mix\Http\Server\Server::class,
             // 构造函数注入
             'constructorArgs' => [
                 // host
