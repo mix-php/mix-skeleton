@@ -4,7 +4,7 @@ namespace App\Udp\Commands;
 
 use App\Udp\Exceptions\ExecutionException;
 use App\Udp\Helpers\SendHelper;
-use App\Udp\Server\UdpServer;
+use App\Udp\Server\Server;
 use Swoole\Coroutine\Channel;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
@@ -19,7 +19,7 @@ class StartCommand
 {
 
     /**
-     * @var UdpServer
+     * @var Server
      */
     public $server;
 
