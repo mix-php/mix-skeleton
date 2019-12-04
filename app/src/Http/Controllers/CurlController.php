@@ -59,6 +59,7 @@ class CurlController
             }
             return json_decode($response, true);
         });
+        $conn->release();
         // 响应
         $content = ['code' => 0, 'message' => 'OK', 'data' => $data];
         return ResponseHelper::json($response, $content);
