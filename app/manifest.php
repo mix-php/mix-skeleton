@@ -244,6 +244,31 @@ return [
             'class' => \App\Common\Dialers\RedisDialer::class,
         ],
 
+        // SyncInvoke连接池
+        [
+            // 名称
+            'name'       => 'syncInvokePool',
+            // 作用域
+            'scope'      => \Mix\Bean\BeanDefinition::SINGLETON,
+            // 类路径
+            'class'      => \Mix\Sync\Invoke\Pool\ConnectionPool::class,
+            // 属性注入
+            'properties' => [
+                // 最多可空闲连接数
+                'maxIdle'   => 5,
+                // 最大连接数
+                'maxActive' => 50,
+                // 拨号器
+                'dialer'    => ['ref' => \App\Common\Dialers\SyncInvokeDialer::class],
+            ],
+        ],
+
+        // SyncInvoke连接池拨号
+        [
+            // 类路径
+            'class' => \App\Common\Dialers\SyncInvokeDialer::class,
+        ],
+
         // Database
         [
             // 类路径
@@ -290,6 +315,19 @@ return [
                 'timeout'         => 5,
                 // 事件调度器
                 'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
+            ],
+        ],
+
+        // SyncInvoke
+        [
+            // 类路径
+            'class'           => \Mix\Sync\Invoke\Connection::class,
+            // 构造函数注入
+            'constructorArgs' => [
+                // 端口
+                9505,
+                // 超时
+                5.0,
             ],
         ],
 
