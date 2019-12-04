@@ -6,6 +6,7 @@ use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Sync\Invoke\Pool\ConnectionPool;
+use mysql_xdevapi\Exception;
 
 /**
  * Class CurlController
@@ -41,7 +42,9 @@ class CurlController
         // 跨进程执行同步代码
         $conn = $this->pool->getConnection();
         $data = $conn->invoke(function () {
-            // 执行同步阻塞代码
+            // 闭包内部的同步阻塞代码会在同步服务器进程中执行
+            // 代码异常会抛出 InvokeException，即便指定 throw new FooException() 也会转换为 InvokeException
+            // 闭包内部代码包含的 Class 文件修改后，需重启同步服务器进程
             $curl = curl_init();
             curl_setopt_array($curl, [
                 CURLOPT_URL            => "http://ip-api.com/json/?lang=zh-CN",
