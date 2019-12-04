@@ -6,7 +6,6 @@ use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
 use Mix\Sync\Invoke\Pool\ConnectionPool;
-use mysql_xdevapi\Exception;
 
 /**
  * Class CurlController
