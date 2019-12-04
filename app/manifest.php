@@ -108,6 +108,17 @@ return [
             ],
         ],
 
+        /** Sync */
+        'sync:start' => [
+            \App\Sync\Commands\StartCommand::class,
+            'description' => "Start service",
+            'options'     => [
+                [['d', 'daemon'], 'description' => "\tRun in the background"],
+                [['p', 'port'], 'description' => "\tListen to the specified port"],
+                [['r', 'reuse-port'], 'description' => "Reuse port in multiple processes"],
+            ],
+        ],
+
     ],
 
     // 依赖配置
@@ -324,9 +335,9 @@ return [
             'class'           => \Mix\Sync\Invoke\Connection::class,
             // 构造函数注入
             'constructorArgs' => [
-                // 端口
+                // port
                 9505,
-                // 超时
+                // timeout
                 5.0,
             ],
         ],
@@ -432,6 +443,7 @@ return [
                     '/'                 => [[\App\Http\Controllers\IndexController::class, 'index'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
                     '/profile/{id}'     => [[\App\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
                     'POST /file/upload' => [[\App\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
+                    '/curl'             => [[\App\Http\Controllers\CurlController::class, 'index'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
                     // 分组路由
                     '/v2'               => [
                         // 分组中间件
@@ -547,6 +559,19 @@ return [
                 '127.0.0.1',
                 // port
                 9504,
+            ],
+        ],
+
+        // SyncInvoke服务器
+        [
+            // 名称
+            'name'            => 'syncInvokeServer',
+            // 类路径
+            'class'           => \Mix\Sync\Invoke\Server::class,
+            // 构造函数注入
+            'constructorArgs' => [
+                // port
+                9505,
             ],
         ],
 
