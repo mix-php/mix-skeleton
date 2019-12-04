@@ -37,6 +37,7 @@
     "mix/http-message": "v2.1.0-RC2",
     "mix/http-server": "v2.1.0-RC2",
     "mix/websocket": "v2.1.0-RC2",
+    "mix/sync-invoke": "v2.1.0-RC2",
     "symfony/dotenv": "~4.3"
   },
   "require-dev": {
