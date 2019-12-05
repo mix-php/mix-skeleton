@@ -24,6 +24,19 @@ class CoroutinePoolDaemonCommand
     public $quit = false;
 
     /**
+     * @var ConnectionPool
+     */
+    public $pool;
+
+    /**
+     * CoroutinePoolDaemonCommand constructor.
+     */
+    public function __construct()
+    {
+        $this->pool = context()->get('redisPool');
+    }
+
+    /**
      * 主函数
      */
     public function main()
@@ -39,9 +52,7 @@ class CoroutinePoolDaemonCommand
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 获取连接
-        /** @var ConnectionPool $redisPool */
-        $redisPool = context()->get('redisPool');
-        $redis     = $redisPool->getConnection();
+        $redis = $this->pool->getConnection();
         // 协程池执行任务
         $maxWorkers = 20;
         $maxQueue   = 20;

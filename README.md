@@ -27,7 +27,7 @@ MixPHP 开发指南：http://doc.mixphp.cn
 安装最新版本：
 
 ```shell
-composer create-project mix/mix-skeleton=v2.1.0-RC2 --prefer-dist
+composer create-project mix/mix-skeleton=v2.1.0 --prefer-dist
 ```
 
 ## License
