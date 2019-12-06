@@ -194,12 +194,15 @@ return [
 
         // 事件调度器
         [
+            // 名称
+            'name'            => 'event',
             // 作用域
             'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
             // 类路径
             'class'           => \Mix\Event\EventDispatcher::class,
             // 构造函数注入
             'constructorArgs' => [
+                \App\Common\Listeners\SchedulerListener::class,
                 \App\Common\Listeners\DatabaseListener::class,
                 \App\Common\Listeners\RedisListener::class,
             ],
@@ -302,7 +305,7 @@ return [
                     \PDO::ATTR_TIMEOUT            => 5,
                 ],
                 // 事件调度器
-                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
+                'eventDispatcher' => ['ref' => 'event'],
             ],
         ],
 
@@ -325,7 +328,7 @@ return [
                 // 超时
                 'timeout'         => 5,
                 // 事件调度器
-                'eventDispatcher' => ['ref' => \Mix\Event\EventDispatcher::class],
+                'eventDispatcher' => ['ref' => 'event'],
             ],
         ],
 

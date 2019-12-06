@@ -3,7 +3,7 @@
 namespace App\Common\Listeners;
 
 use Mix\Event\ListenerInterface;
-use Mix\Redis\Event\ExecuteEvent;
+use Mix\Redis\Event\CalledEvent;
 
 /**
  * Class RedisListener
@@ -21,7 +21,7 @@ class RedisListener implements ListenerInterface
     {
         // 要监听的事件数组，可监听多个事件
         return [
-            ExecuteEvent::class,
+            CalledEvent::class,
         ];
     }
 

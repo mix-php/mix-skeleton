@@ -39,11 +39,6 @@ class StartCommand
      */
     public function main()
     {
-        // 守护处理
-        $daemon = Flag::bool(['d', 'daemon'], false);
-        if ($daemon) {
-            ProcessHelper::daemon();
-        }
         // 参数重写
         $port = Flag::string(['p', 'port'], '');
         if ($port) {

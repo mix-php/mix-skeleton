@@ -2,7 +2,7 @@
 
 namespace App\Common\Listeners;
 
-use Mix\Database\Event\ExecuteEvent;
+use Mix\Database\Event\ExecutedEvent;
 use Mix\Event\ListenerInterface;
 
 /**
@@ -21,7 +21,7 @@ class DatabaseListener implements ListenerInterface
     {
         // 要监听的事件数组，可监听多个事件
         return [
-            ExecuteEvent::class,
+            ExecutedEvent::class,
         ];
     }
 
