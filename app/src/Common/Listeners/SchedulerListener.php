@@ -3,7 +3,7 @@
 namespace App\Common\Listeners;
 
 use Mix\Console\CommandLine\Flag;
-use Mix\Console\Event\BeforeSchedulerStartEvent;
+use Mix\Console\Event\CommandBeforeExecuteEvent;
 use Mix\Event\ListenerInterface;
 use Mix\Helper\ProcessHelper;
 
@@ -23,7 +23,7 @@ class SchedulerListener implements ListenerInterface
     {
         // 要监听的事件数组，可监听多个事件
         return [
-            BeforeSchedulerStartEvent::class,
+            CommandBeforeExecuteEvent::class,
         ];
     }
 
@@ -36,8 +36,8 @@ class SchedulerListener implements ListenerInterface
     {
         // 事件触发后，会执行该方法
         // 守护处理
-        if ($event instanceof BeforeSchedulerStartEvent) {
-            switch ($event->class) {
+        if ($event instanceof CommandBeforeExecuteEvent) {
+            switch ($event->command) {
                 case \App\Http\Commands\StartCommand::class:
                 case \App\WebSocket\Commands\StartCommand::class:
                 case \App\Tcp\Commands\StartCommand::class:
