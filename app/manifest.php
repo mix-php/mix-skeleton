@@ -202,7 +202,7 @@ return [
             'class'           => \Mix\Event\EventDispatcher::class,
             // 构造函数注入
             'constructorArgs' => [
-                \App\Common\Listeners\SchedulerListener::class,
+                \App\Common\Listeners\CommandListener::class,
                 \App\Common\Listeners\DatabaseListener::class,
                 \App\Common\Listeners\RedisListener::class,
             ],
