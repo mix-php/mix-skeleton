@@ -224,6 +224,8 @@ return [
                 'maxActive' => 50,
                 // 拨号器
                 'dialer'    => ['ref' => \App\Common\Dialers\DatabaseDialer::class],
+                // 事件调度器
+                'eventDispatcher' => ['ref' => 'event'],
             ],
         ],
 
@@ -249,6 +251,8 @@ return [
                 'maxActive' => 50,
                 // 拨号器
                 'dialer'    => ['ref' => \App\Common\Dialers\RedisDialer::class],
+                // 事件调度器
+                'eventDispatcher' => ['ref' => 'event'],
             ],
         ],
 
@@ -274,6 +278,8 @@ return [
                 'maxActive' => 50,
                 // 拨号器
                 'dialer'    => ['ref' => \App\Common\Dialers\SyncInvokeDialer::class],
+                // 事件调度器
+                'eventDispatcher' => ['ref' => 'event'],
             ],
         ],
 
