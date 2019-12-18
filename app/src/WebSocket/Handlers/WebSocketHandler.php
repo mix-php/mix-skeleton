@@ -96,7 +96,7 @@ class WebSocketHandler
                 // 清理会话资源
                 $this->session->clear();
                 // 忽略服务器主动断开连接异常
-                if ($e instanceof ReceiveException && $e->getCode() == 104) {
+                if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104
                     return;
                 }
                 // 忽略客户端主动断开连接异常

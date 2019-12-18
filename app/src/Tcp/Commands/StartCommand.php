@@ -144,7 +144,7 @@ class StartCommand
                 $this->runAction($sendChan, $data);
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
-                if ($e instanceof ReceiveException && $e->getCode() == 104) {
+                if ($e instanceof ReceiveException && in_array($e->getCode(),[54, 104])) { // mac=54, linux=104
                     return;
                 }
                 // 抛出异常

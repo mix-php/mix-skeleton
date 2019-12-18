@@ -6,7 +6,7 @@ use Swoole\Coroutine\Socket;
 use Mix\Concurrent\Coroutine;
 
 /**
- * Class UdpServer
+ * Class Server
  * @package App\Udp\Server
  * @author liu,jian <coder.keda@gmail.com>
  */
@@ -83,7 +83,7 @@ class Server
         while (true) {
             $peer = null;
             $data = $socket->recvfrom($peer);
-            if ($socket->errCode == 104) { // shutdown
+            if ($socket->errMsg == 'Connection reset by peer' && in_array($socket->errCode, [54, 104])) { // mac=54, linux=104
                 return;
             }
             if ($data === false) {
@@ -98,6 +98,7 @@ class Server
      * @param string $data
      * @param int $port
      * @param string $address
+     * @throws \Swoole\Exception
      */
     public function send(string $data, int $port, string $address)
     {
@@ -122,7 +123,7 @@ class Server
             if ($errMsg == '' && $errCode == 0) {
                 return;
             }
-            if ($errMsg == 'Connection reset by peer' && $errCode == 104) {
+            if ($errMsg == 'Connection reset by peer' && in_array($errCode, [54, 104])) { // mac=54, linux=104
                 return;
             }
             throw new \Swoole\Exception($errMsg, $errCode);
