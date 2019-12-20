@@ -50,14 +50,13 @@ class CorsMiddleware implements MiddlewareInterface
     {
         // 跨域处理
         $response = $this->response;
+        $response->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'Origin, Accept, Keep-Alive, User-Agent, Cache-Control, Content-Type, X-Requested-With, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS');
         if ($request->getMethod() == 'OPTIONS') {
-            $response->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Credentials', 'true')
-                ->withHeader('Access-Control-Allow-Headers', 'DNT,Keep-Alive,User-Agent,Cache-Control,Content-Type,Authorization')
-                ->withBody((new StreamFactory())->createStream(''));
+            $response->withBody((new StreamFactory())->createStream(''));
             return $response;
         }
-
         // 继续往下执行
         return $handler->handle($request);
     }
