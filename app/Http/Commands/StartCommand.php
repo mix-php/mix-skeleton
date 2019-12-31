@@ -120,7 +120,7 @@ class StartCommand
             $response   = $dispatcher->dispatch();
             // 执行控制器
             if (!$response->getBody()) {
-                $response = call_user_func($result->getCallback(), $request, $response);
+                $response = call_user_func($result->getCallback($request, $response), $request, $response);
             }
             /** @var Response $response */
             $response->end();

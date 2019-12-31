@@ -15,6 +15,15 @@ class IndexController
 {
 
     /**
+     * FileController constructor.
+     * @param ServerRequest $request
+     * @param Response $response
+     */
+    public function __construct(ServerRequest $request, Response $response)
+    {
+    }
+
+    /**
      * Index
      * @param ServerRequest $request
      * @param Response $response

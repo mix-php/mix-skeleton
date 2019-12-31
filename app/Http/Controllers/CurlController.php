@@ -23,7 +23,7 @@ class CurlController
     /**
      * CurlController constructor.
      */
-    public function __construct()
+    public function __construct(ServerRequest $request, Response $response)
     {
         $this->pool = context()->get('syncInvokePool');
     }
