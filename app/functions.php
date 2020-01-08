@@ -4,18 +4,34 @@
  * 用户助手函数
  */
 
+
 /**
  * 获取全局配置对象
- * @return Noodlehaus\Config
- * @throws Exception
+ * @return \Noodlehaus\Config
  */
 function config()
 {
-    if (!isset($GLOBALS['config'])) {
-        throw new \Exception('Global $config not found');
-    }
-    if (!($GLOBALS['config'] instanceof Noodlehaus\Config)) {
-        throw new \Exception('Global $config type not match Noodlehaus\Config::class');
-    }
     return $GLOBALS['config'];
+}
+
+/**
+ * 获取全局App对象
+ * @return \Mix\Console\Application
+ */
+if (!function_exists('app')) {
+    function app()
+    {
+        return $GLOBALS['app'];
+    }
+}
+
+/**
+ * 获取全局上下文对象
+ * @return \Mix\Bean\ApplicationContext
+ */
+if (!function_exists('context')) {
+    function context()
+    {
+        return app()->context;
+    }
 }
