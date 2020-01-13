@@ -235,6 +235,32 @@ return [
             'class' => \App\Common\Dialers\DatabaseDialer::class,
         ],
 
+        // Database连接
+        [
+            // 类路径
+            'class'      => \Mix\Database\Connection::class,
+            // 初始方法
+            'initMethod' => 'connect',
+            // 属性注入
+            'properties' => [
+                // 数据源格式
+                'dsn'             => getenv('DATABASE_DSN'),
+                // 数据库用户名
+                'username'        => getenv('DATABASE_USERNAME'),
+                // 数据库密码
+                'password'        => getenv('DATABASE_PASSWORD'),
+                // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
+                'attributes'      => [
+                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                    // 超时
+                    \PDO::ATTR_TIMEOUT            => 5,
+                ],
+                // 事件调度器
+                'eventDispatcher' => ['ref' => 'event'],
+            ],
+        ],
+
         // Redis连接池
         [
             // 名称
@@ -260,6 +286,29 @@ return [
         [
             // 类路径
             'class' => \App\Common\Dialers\RedisDialer::class,
+        ],
+
+        // Redis连接
+        [
+            // 类路径
+            'class'      => \Mix\Redis\Connection::class,
+            // 初始方法
+            'initMethod' => 'connect',
+            // 属性注入
+            'properties' => [
+                // 主机
+                'host'            => getenv('REDIS_HOST'),
+                // 端口
+                'port'            => getenv('REDIS_PORT'),
+                // 数据库
+                'database'        => getenv('REDIS_DATABASE'),
+                // 密码
+                'password'        => getenv('REDIS_PASSWORD'),
+                // 超时
+                'timeout'         => 5,
+                // 事件调度器
+                'eventDispatcher' => ['ref' => 'event'],
+            ],
         ],
 
         // SyncInvoke连接池
@@ -289,56 +338,7 @@ return [
             'class' => \App\Common\Dialers\SyncInvokeDialer::class,
         ],
 
-        // Database
-        [
-            // 类路径
-            'class'      => \Mix\Database\Connection::class,
-            // 初始方法
-            'initMethod' => 'connect',
-            // 属性注入
-            'properties' => [
-                // 数据源格式
-                'dsn'             => getenv('DATABASE_DSN'),
-                // 数据库用户名
-                'username'        => getenv('DATABASE_USERNAME'),
-                // 数据库密码
-                'password'        => getenv('DATABASE_PASSWORD'),
-                // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-                'attributes'      => [
-                    // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                    // 超时
-                    \PDO::ATTR_TIMEOUT            => 5,
-                ],
-                // 事件调度器
-                'eventDispatcher' => ['ref' => 'event'],
-            ],
-        ],
-
-        // Redis
-        [
-            // 类路径
-            'class'      => \Mix\Redis\Connection::class,
-            // 初始方法
-            'initMethod' => 'connect',
-            // 属性注入
-            'properties' => [
-                // 主机
-                'host'            => getenv('REDIS_HOST'),
-                // 端口
-                'port'            => getenv('REDIS_PORT'),
-                // 数据库
-                'database'        => getenv('REDIS_DATABASE'),
-                // 密码
-                'password'        => getenv('REDIS_PASSWORD'),
-                // 超时
-                'timeout'         => 5,
-                // 事件调度器
-                'eventDispatcher' => ['ref' => 'event'],
-            ],
-        ],
-
-        // SyncInvoke
+        // SyncInvoke连接
         [
             // 类路径
             'class'           => \Mix\Sync\Invoke\Connection::class,
@@ -348,6 +348,17 @@ return [
                 9505,
                 // timeout
                 5.0,
+            ],
+        ],
+
+        // SyncInvoke客户端
+        [
+            // 类路径
+            'class'      => \Mix\Sync\Invoke\Client::class,
+            // 属性注入
+            'properties' => [
+                // 连接池
+                'pool' => ['ref' => 'syncInvokePool'],
             ],
         ],
 

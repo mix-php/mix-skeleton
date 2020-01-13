@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Sync\Invoke\Pool\ConnectionPool;
+use Mix\Sync\Invoke\Client;
 
 /**
  * Class CurlController
@@ -16,16 +16,16 @@ class CurlController
 {
 
     /**
-     * @var ConnectionPool
+     * @var Client
      */
-    public $pool;
+    public $client;
 
     /**
      * CurlController constructor.
      */
     public function __construct(ServerRequest $request, Response $response)
     {
-        $this->pool = context()->get('syncInvokePool');
+        $this->client = context()->get(Client::class);
     }
 
     /**
@@ -39,8 +39,7 @@ class CurlController
     public function index(ServerRequest $request, Response $response)
     {
         // 跨进程执行同步代码
-        $conn = $this->pool->getConnection();
-        $data = $conn->invoke(function () {
+        $data = $this->client->invoke(function () {
             /**
              * 闭包内部的同步阻塞代码会在同步服务器进程中执行
              * 代码异常会抛出 InvokeException，即便指定 throw new FooException() 也会转换为 InvokeException
@@ -78,7 +77,6 @@ class CurlController
 
              */
         });
-        $conn->release();
         // 响应
         $content = ['code' => 0, 'message' => 'OK', 'data' => $data];
         return ResponseHelper::json($response, $content);
