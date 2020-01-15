@@ -55,19 +55,17 @@ return [
     // Redis订阅器
     [
         // 类路径
-        'class'      => \Mix\Redis\Subscribe\Subscriber::class,
-        // 初始方法
-        'initMethod' => 'connect',
-        // 属性注入
-        'properties' => [
-            // 主机
-            'host'     => getenv('REDIS_HOST'),
-            // 端口
-            'port'     => getenv('REDIS_PORT'),
-            // 密码
-            'password' => getenv('REDIS_PASSWORD'),
-            // 超时
-            'timeout'  => 5,
+        'class'           => \Mix\Redis\Subscribe\Subscriber::class,
+        // 构造函数注入
+        'constructorArgs' => [
+            // host
+            getenv('REDIS_HOST'),
+            // port
+            getenv('REDIS_PORT'),
+            // password
+            getenv('REDIS_PASSWORD'),
+            // timeout
+            5,
         ],
     ],
 
