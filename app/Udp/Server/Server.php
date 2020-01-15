@@ -117,6 +117,9 @@ class Server
      */
     public function shutdown()
     {
+        if (!$this->swooleSocket) {
+            return;
+        }
         if (!$this->swooleSocket->close()) {
             $errMsg  = $this->swooleSocket->errMsg;
             $errCode = $this->swooleSocket->errCode;
