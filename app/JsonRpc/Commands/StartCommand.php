@@ -6,6 +6,7 @@ use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
 use Mix\JsonRpc\Server;
+use Mix\Http\Server\Server as HttpServer;
 
 /**
  * Class StartCommand
@@ -18,7 +19,12 @@ class StartCommand
     /**
      * @var Server
      */
-    public $server;
+    public $rpcServer;
+
+    /**
+     * @var HttpServer
+     */
+    public $httpServer;
 
     /**
      * @var Logger
@@ -37,8 +43,9 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log    = context()->get('log');
-        $this->server = context()->get('jsonRpcServer');
+        $this->log        = context()->get('log');
+        $this->rpcServer  = context()->get('jsonRpcServer');
+        $this->httpServer = context()->get('httpServer');
     }
 
     /**
@@ -47,19 +54,30 @@ class StartCommand
     public function main()
     {
         // 参数重写
-        $port = Flag::string(['p', 'port'], '');
-        if ($port) {
-            $this->server->port = $port;
+        $host = Flag::string(['h', 'host'], '');
+        if ($host) {
+            $this->rpcServer->host  = $host;
+            $this->httpServer->host = $host;
+        }
+        $tcpPort = Flag::string(['p', 'tcp-port'], '');
+        if ($tcpPort) {
+            $this->rpcServer->port = $tcpPort;
+        }
+        $httpPort = Flag::string(['P', 'http-port'], '');
+        if ($httpPort) {
+            $this->httpServer->port = $httpPort;
         }
         $reusePort = Flag::bool(['r', 'reuse-port'], false);
         if ($reusePort) {
-            $this->server->reusePort = $reusePort;
+            $this->rpcServer->reusePort  = $reusePort;
+            $this->httpServer->reusePort = $reusePort;
         }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->log->info('received signal [{signal}]', ['signal' => $signal]);
             $this->log->info('server shutdown');
-            $this->server->shutdown();
+            $this->httpServer->shutdown();
+            $this->rpcServer->shutdown();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
         // 启动服务器
@@ -74,9 +92,12 @@ class StartCommand
         $this->welcome();
         $this->log->info('server start');
         foreach ($this->services as $service) {
-            $this->server->register(new $service);
+            $this->rpcServer->register(new $service);
         }
-        $this->server->start();
+        xgo(function () {
+            $this->rpcServer->start();
+        });
+        $this->httpServer->start($this->rpcServer);
     }
 
     /**
@@ -86,8 +107,9 @@ class StartCommand
     {
         $phpVersion    = PHP_VERSION;
         $swooleVersion = swoole_version();
-        $host          = $this->server->host;
-        $port          = $this->server->port;
+        $host          = $this->rpcServer->host;
+        $tcpPort       = $this->rpcServer->port;
+        $httpPort      = $this->httpServer->port;
         echo <<<EOL
                               ____
  ______ ___ _____ ___   _____  / /_ _____
@@ -104,7 +126,8 @@ EOL;
         println("Swoole         Version:   {$swooleVersion}");
         println('Framework      Version:   ' . \Mix::$version);
         println("Listen         Addr:      {$host}");
-        println("Listen         Port:      {$port}");
+        println("TCP            Port:      {$tcpPort}");
+        println("HTTP           Port:      {$httpPort}");
     }
 
 }

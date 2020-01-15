@@ -42,7 +42,7 @@ class JsonRpcController
         $a = $request->getAttribute('a', 0);
         $b = $request->getAttribute('b', 0);
         // 调用rpc
-        $rpcRequest  = RequestFactory::create('Foo.Sum', [$a, $b], 10001);
+        $rpcRequest  = (new RequestFactory)->createRequest('Foo.Sum', [$a, $b], 10001);
         $rpcResponse = $this->client->call($rpcRequest);
         if ($rpcResponse->error) {
             throw new \Exception(sprintf('rpc call failed: %s', $rpcResponse->error->message), $rpcResponse->error->code);
