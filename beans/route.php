@@ -27,6 +27,7 @@ return [
                 '/profile/{id}'     => [[\App\Http\Controllers\ProfileController::class, 'index'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
                 'POST /file/upload' => [[\App\Http\Controllers\FileController::class, 'upload'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
                 '/curl'             => [[\App\Http\Controllers\CurlController::class, 'index'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
+                '/jsonrpc'          => [[\App\Http\Controllers\JsonRpcController::class, 'index'], 'middleware' => [\App\Http\Middleware\ActionMiddleware::class]],
                 // 分组路由
                 '/v2'               => [
                     // 分组中间件

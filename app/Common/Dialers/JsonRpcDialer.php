@@ -3,14 +3,14 @@
 namespace App\Common\Dialers;
 
 use Mix\Pool\DialerInterface;
-use Mix\SyncInvoke\Connection;
+use Mix\JsonRpc\Connection;
 
 /**
- * Class SyncInvokeDialer
+ * Class JsonRpcDialer
  * @package App\Common\Dialers
  * @author liu,jian <coder.keda@gmail.com>
  */
-class SyncInvokeDialer implements DialerInterface
+class JsonRpcDialer implements DialerInterface
 {
 
     /**
