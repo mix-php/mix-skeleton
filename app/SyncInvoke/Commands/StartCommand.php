@@ -87,7 +87,7 @@ class StartCommand
 
 
 EOL;
-        println('Server         Name:      mix-syncd');
+        println('Server         Name:      mix-syncinvoked');
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");

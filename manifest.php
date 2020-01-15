@@ -112,7 +112,7 @@ return [
         ],
 
         /** SyncInvoke */
-        'sync:start' => [
+        'si:start'   => [
             \App\SyncInvoke\Commands\StartCommand::class,
             'description' => "Start service",
             'options'     => [
@@ -123,7 +123,7 @@ return [
         ],
 
         /** JsonRpc */
-        'jrpc:start' => [
+        'jr:start'   => [
             \App\JsonRpc\Commands\StartCommand::class,
             'description' => "Start service",
             'options'     => [
