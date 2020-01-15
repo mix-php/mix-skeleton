@@ -9,7 +9,7 @@ return [
         // 作用域
         'scope'      => \Mix\Bean\BeanDefinition::SINGLETON,
         // 类路径
-        'class'      => \Mix\Sync\Invoke\Pool\ConnectionPool::class,
+        'class'      => \Mix\SyncInvoke\Pool\ConnectionPool::class,
         // 属性注入
         'properties' => [
             // 最多可空闲连接数
@@ -32,7 +32,7 @@ return [
     // SyncInvoke连接
     [
         // 类路径
-        'class'           => \Mix\Sync\Invoke\Connection::class,
+        'class'           => \Mix\SyncInvoke\Connection::class,
         // 构造函数注入
         'constructorArgs' => [
             // port
@@ -45,11 +45,24 @@ return [
     // SyncInvoke客户端
     [
         // 类路径
-        'class'      => \Mix\Sync\Invoke\Client::class,
+        'class'      => \Mix\SyncInvoke\Client::class,
         // 属性注入
         'properties' => [
             // 连接池
             'pool' => ['ref' => 'syncInvokePool'],
+        ],
+    ],
+
+    // SyncInvoke服务器
+    [
+        // 名称
+        'name'            => 'syncInvokeServer',
+        // 类路径
+        'class'           => \Mix\SyncInvoke\Server::class,
+        // 构造函数注入
+        'constructorArgs' => [
+            // port
+            9505,
         ],
     ],
 

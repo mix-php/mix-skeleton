@@ -5,7 +5,7 @@ namespace App\Sync\Commands;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Log\Logger;
-use Mix\Sync\Invoke\Server;
+use Mix\SyncInvoke\Server;
 
 /**
  * Class StartCommand

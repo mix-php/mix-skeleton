@@ -53,17 +53,4 @@ return [
         ],
     ],
 
-    // SyncInvoke服务器
-    [
-        // 名称
-        'name'            => 'syncInvokeServer',
-        // 类路径
-        'class'           => \Mix\Sync\Invoke\Server::class,
-        // 构造函数注入
-        'constructorArgs' => [
-            // port
-            9505,
-        ],
-    ],
-
 ];

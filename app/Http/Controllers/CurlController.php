@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Sync\Invoke\Client;
+use Mix\SyncInvoke\Client;
 
 /**
  * Class CurlController
@@ -33,7 +33,7 @@ class CurlController
      * @param ServerRequest $request
      * @param Response $response
      * @return Response
-     * @throws \Mix\Sync\Invoke\Exception\InvokeException
+     * @throws \Mix\SyncInvoke\Exception\InvokeException
      * @throws \Swoole\Exception
      */
     public function index(ServerRequest $request, Response $response)

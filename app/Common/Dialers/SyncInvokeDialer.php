@@ -3,7 +3,7 @@
 namespace App\Common\Dialers;
 
 use Mix\Pool\DialerInterface;
-use Mix\Sync\Invoke\Connection;
+use Mix\SyncInvoke\Connection;
 
 /**
  * Class InvokeDialer
