@@ -43,12 +43,12 @@ class CurlController
             /**
              * 闭包内部的同步阻塞代码会在同步服务器进程中执行
              * 代码异常会抛出 InvokeException，即便指定 throw new FooException() 也会转换为 InvokeException
-             * 闭包内部代码包含的 Class 文件修改后，需重启 mix-syncd 服务器进程
+             * 闭包内部代码包含的 Class 文件修改后，需重启 mix-syncinvoked 服务器进程
              */
 
             /**
              * 直接传输代码的方式
-             * 该方式传输数据多，但修改代码无需重启 mix-syncd 服务器进程
+             * 该方式传输数据多，但修改代码无需重启 mix-syncinvoked 服务器进程
              */
             $curl = curl_init();
             curl_setopt_array($curl, [
@@ -69,10 +69,10 @@ class CurlController
 
             /*
              * 也可使用代码中包含 class 的方式
-             * 该方式传输数据少，但 class 内部代码修改后需要重启 mix-syncd 服务器进程
+             * 该方式传输数据少，但 class 内部代码修改后需要重启 mix-syncinvoked 服务器进程
              *
 
-            $curl = new \App\Http\Sync\Curl();
+            $curl = new \App\Http\SyncInvoke\Curl();
             return $curl->exec();
 
              */
