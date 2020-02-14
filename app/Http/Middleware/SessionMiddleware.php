@@ -47,7 +47,9 @@ class SessionMiddleware implements MiddlewareInterface
             'request'  => $request,
             'response' => $response,
         ]);
-        $this->request->withSession($this->session); // 把Session放入Request，方便其他位置调用
+        // 把 Session 放入 Request 的上下文，方便其他位置调用
+        $context = $this->request->getContext();
+        $context->session = $this->session;
     }
 
     /**
