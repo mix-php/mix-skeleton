@@ -40,8 +40,7 @@
     "mix/sync-invoke": "~2.1.0",
     "mix/json-rpc": "~2.1.0",
     "symfony/dotenv": "~4.3",
-    "hassankhan/config": "^2.1",
-    "mix/mix": "~2.1.0"
+    "hassankhan/config": "^2.1"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"
