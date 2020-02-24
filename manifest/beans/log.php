@@ -45,7 +45,7 @@ return [
         // 属性注入
         'properties' => [
             // 日志目录
-            'dir'         => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'logs',
+            'dir'         => dirname(__DIR__) . DIRECTORY_SEPARATOR,
             // 日志轮转类型
             'rotate'      => \Mix\Log\FileHandler::ROTATE_DAY,
             // 最大文件尺寸

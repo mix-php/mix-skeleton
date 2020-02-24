@@ -24,7 +24,7 @@ return [
         // 属性注入
         'properties' => [
             // 缓存目录
-            'dir'        => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR . 'cache',
+            'dir'        => dirname(__DIR__) . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . 'cache',
             // 分区
             'partitions' => 64,
         ],
