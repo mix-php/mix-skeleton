@@ -17,16 +17,31 @@ return [
             // 最大连接数
             'maxActive'       => 50,
             // 拨号器
-            'dialer'          => ['ref' => \App\Common\Dialers\RedisDialer::class],
+            'dialer'          => ['ref' => \Mix\Redis\Pool\Dialer::class],
             // 事件调度器
             'eventDispatcher' => ['ref' => 'event'],
         ],
     ],
 
-    // Redis连接池拨号
+    // Redis连接池拨号器
     [
         // 类路径
-        'class' => \App\Common\Dialers\RedisDialer::class,
+        'class'      => \Mix\Redis\Pool\Dialer::class,
+        // 属性注入
+        'properties' => [
+            // 主机
+            'host'            => getenv('REDIS_HOST'),
+            // 端口
+            'port'            => getenv('REDIS_PORT'),
+            // 数据库
+            'database'        => getenv('REDIS_DATABASE'),
+            // 密码
+            'password'        => getenv('REDIS_PASSWORD'),
+            // 超时
+            'timeout'         => 5,
+            // 事件调度器
+            'eventDispatcher' => ['ref' => 'event'],
+        ],
     ],
 
     // Redis连接

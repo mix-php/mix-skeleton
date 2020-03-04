@@ -17,28 +17,20 @@ return [
             // 最大连接数
             'maxActive'       => 50,
             // 拨号器
-            'dialer'          => ['ref' => \App\Common\Dialers\SyncInvokeDialer::class],
+            'dialer'          => ['ref' => \Mix\SyncInvoke\Pool\Dialer::class],
             // 事件调度器
             'eventDispatcher' => ['ref' => 'event'],
         ],
     ],
 
-    // SyncInvoke连接池拨号
+    // SyncInvoke连接池拨号器
     [
         // 类路径
-        'class' => \App\Common\Dialers\SyncInvokeDialer::class,
-    ],
-
-    // SyncInvoke连接
-    [
-        // 类路径
-        'class'           => \Mix\SyncInvoke\Connection::class,
-        // 构造函数注入
-        'constructorArgs' => [
+        'class'      => \Mix\SyncInvoke\Pool\Dialer::class,
+        // 属性注入
+        'properties' => [
             // port
-            9505,
-            // timeout
-            5.0,
+            'port' => 9505,
         ],
     ],
 
