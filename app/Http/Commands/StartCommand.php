@@ -80,11 +80,10 @@ class StartCommand
     public function start()
     {
         $server = $this->server;
-        $server->handle('/', function (ServerRequest $request, Response $response) {
-            $this->handle($request, $response);
-        });
+        $server->handle('/', [$this, 'handle']);
         $server->set([
-            //...
+            'document_root'         => app()->basePath . '/public',
+            'enable_static_handler' => false, // 此功能较为简易，请勿在公网环境直接使用，正式环境请使用 nginx 处理静态文件
         ]);
         $this->welcome();
         $this->log->info('server start');
@@ -136,8 +135,6 @@ class StartCommand
      * 404处理
      * @param \Throwable $e
      * @param Response $response
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public static function show404(\Throwable $e, Response $response)
     {
@@ -156,8 +153,6 @@ class StartCommand
      * 500处理
      * @param \Throwable $e
      * @param Response $response
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public static function show500(\Throwable $e, Response $response)
     {

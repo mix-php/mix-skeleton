@@ -36,7 +36,7 @@
 
 <?php if (!empty($file)): ?>
 <p><?= $type ?> code <?= $code ?></p>
-    <p><span><?= $file ?></span> line <span><?= $line ?></span></p>
+<p><span><?= $file ?></span> line <span><?= $line ?></span></p>
 <p><?= str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
