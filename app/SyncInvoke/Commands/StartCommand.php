@@ -31,11 +31,12 @@ class StartCommand
     public function __construct()
     {
         $this->log    = context()->get('log');
-        $this->server = context()->get('syncInvokeServer');
+        $this->server = context()->get(Server::class);
     }
 
     /**
      * 主函数
+     * @throws \Swoole\Exception
      */
     public function main()
     {
@@ -61,6 +62,7 @@ class StartCommand
 
     /**
      * 启动服务器
+     * @throws \Swoole\Exception
      */
     public function start()
     {

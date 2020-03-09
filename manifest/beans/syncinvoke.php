@@ -4,8 +4,6 @@ return [
 
     // SyncInvoke连接池
     [
-        // 名称
-        'name'       => 'syncInvokePool',
         // 作用域
         'scope'      => \Mix\Bean\BeanDefinition::SINGLETON,
         // 类路径
@@ -41,20 +39,34 @@ return [
         // 属性注入
         'properties' => [
             // 连接池
-            'pool' => ['ref' => 'syncInvokePool'],
+            'pool' => ['ref' => \Mix\SyncInvoke\Pool\ConnectionPool::class],
         ],
     ],
 
     // SyncInvoke服务器
     [
-        // 名称
-        'name'            => 'syncInvokeServer',
         // 类路径
         'class'           => \Mix\SyncInvoke\Server::class,
         // 构造函数注入
         'constructorArgs' => [
             // port
             9505,
+        ],
+        // 属性注入
+        'properties'      => [
+            // 处理器
+            'handler' => ['ref' => \Mix\SyncInvoke\Handler::class],
+        ],
+    ],
+
+    // SyncInvoke处理器
+    [
+        // 类路径
+        'class'      => \Mix\SyncInvoke\Handler::class,
+        // 属性注入
+        'properties' => [
+            // 日志
+            'log' => ['ref' => 'log'],
         ],
     ],
 
