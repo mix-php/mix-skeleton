@@ -44,8 +44,8 @@ class StartCommand
     public function __construct()
     {
         $this->log        = context()->get('log');
-        $this->rpcServer  = context()->get('jsonRpcServer');
-        $this->httpServer = context()->get('httpServer');
+        $this->rpcServer  = context()->get(Server::class);
+        $this->httpServer = context()->get(HttpServer::class);
     }
 
     /**

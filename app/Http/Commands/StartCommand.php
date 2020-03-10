@@ -42,7 +42,7 @@ class StartCommand
     {
         $this->log    = context()->get('log');
         $this->route  = context()->get('route');
-        $this->server = context()->get('httpServer');
+        $this->server = context()->get(Server::class);
     }
 
     /**

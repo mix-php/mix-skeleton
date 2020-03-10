@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\ResponseHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\JsonRpc\Client;
+use Mix\JsonRpc\Client\Connection;
 use Mix\JsonRpc\Factory\RequestFactory;
 
 /**
@@ -17,16 +17,16 @@ class JsonRpcController
 {
 
     /**
-     * @var Client
+     * @var Connection
      */
-    public $client;
+    public $conn;
 
     /**
      * CurlController constructor.
      */
     public function __construct(ServerRequest $request, Response $response)
     {
-        $this->client = context()->get(Client::class);
+        $this->conn = context()->get(Connection::class);
     }
 
     /**
@@ -43,7 +43,7 @@ class JsonRpcController
         $b = $request->getAttribute('b', 0);
         // 调用rpc
         $rpcRequest  = (new RequestFactory)->createRequest('Foo.Sum', [$a, $b], 10001);
-        $rpcResponse = $this->client->call($rpcRequest);
+        $rpcResponse = $this->conn->call($rpcRequest);
         if ($rpcResponse->error) {
             throw new \Exception(sprintf('rpc call failed: %s', $rpcResponse->error->message), $rpcResponse->error->code);
         }

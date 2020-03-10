@@ -2,7 +2,7 @@
 
 return [
 
-    'jr:start' => [
+    'jrpc:start' => [
         \App\JsonRpc\Commands\StartCommand::class,
         'description' => "Start service",
         'options'     => [

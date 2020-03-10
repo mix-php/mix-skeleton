@@ -4,8 +4,6 @@ return [
 
     // Http服务器
     [
-        // 名称
-        'name'            => 'httpServer',
         // 类路径
         'class'           => \Mix\Http\Server\Server::class,
         // 构造函数注入
@@ -21,8 +19,6 @@ return [
 
     // Tcp服务器
     [
-        // 名称
-        'name'            => 'tcpServer',
         // 类路径
         'class'           => \Mix\Server\Server::class,
         // 构造函数注入
@@ -38,8 +34,6 @@ return [
 
     // Udp服务器
     [
-        // 名称
-        'name'            => 'udpServer',
         // 类路径
         'class'           => \App\Udp\Server\Server::class,
         // 构造函数注入
