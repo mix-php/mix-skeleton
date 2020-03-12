@@ -10,5 +10,4 @@ require __DIR__ . '/../vendor/autoload.php';
 $config = new Noodlehaus\Config(__DIR__ . '/../config');
 
 // Run application
-$app = new Mix\Console\Application(require __DIR__ . '/../manifest/manifest.php');
-$app->run();
+(new Mix\Console\Application(require __DIR__ . '/../manifest/manifest.php'))->run();
