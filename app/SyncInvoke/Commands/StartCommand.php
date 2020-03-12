@@ -9,7 +9,7 @@ use Mix\SyncInvoke\Server;
 
 /**
  * Class StartCommand
- * @package App\Sync\Commands
+ * @package App\SyncInvoke\Commands
  * @author liu,jian <coder.keda@gmail.com>
  */
 class StartCommand
@@ -41,7 +41,7 @@ class StartCommand
     public function main()
     {
         // 参数重写
-        $port = Flag::string(['p', 'port'], '');
+        $port = Flag::int(['p', 'port'], 0);
         if ($port) {
             $this->server->port = $port;
         }
@@ -89,7 +89,7 @@ class StartCommand
 
 
 EOL;
-        println('Server         Name:      mix-syncinvoked');
+        println('Server         Name:      mix-syncinvoke');
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");

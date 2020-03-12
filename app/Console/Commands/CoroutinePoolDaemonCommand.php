@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Console\Workers\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Mix\Console\CommandLine\Flag;
 use Swoole\Coroutine\Channel;
 use Mix\Helper\ProcessHelper;
 use Mix\Redis\Pool\ConnectionPool;
@@ -41,11 +40,6 @@ class CoroutinePoolDaemonCommand
      */
     public function main()
     {
-        // 守护处理
-        $daemon = Flag::bool(['d', 'daemon'], false);
-        if ($daemon) {
-            ProcessHelper::daemon();
-        }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
             $this->quit = true;

@@ -47,12 +47,13 @@ class StartCommand
     public function __construct()
     {
         $this->log      = context()->get('log');
-        $this->server   = context()->get('httpServer');
+        $this->server   = context()->get(Server::class);
         $this->upgrader = new Upgrader();
     }
 
     /**
      * 主函数
+     * @throws \Swoole\Exception
      */
     public function main()
     {
@@ -61,7 +62,7 @@ class StartCommand
         if ($host) {
             $this->server->host = $host;
         }
-        $port = Flag::string(['p', 'port'], '');
+        $port = Flag::int(['p', 'port'], 9512);
         if ($port) {
             $this->server->port = $port;
         }
@@ -83,13 +84,14 @@ class StartCommand
 
     /**
      * 启动服务器
+     * @throws \Swoole\Exception
      */
     public function start()
     {
         $server = $this->server;
-        $server->handle('/', function (ServerRequest $request, Response $response) {
-            $this->handle($request, $response);
-        });
+        foreach (array_keys($this->patterns) as $pattern) {
+            $server->handle($pattern, [$this, 'handle']);
+        }
         $server->set([
             //...
         ]);
@@ -105,14 +107,6 @@ class StartCommand
      */
     public function handle(ServerRequest $request, Response $response)
     {
-        $pathinfo = $request->getServerParams()['path_info'] ?: '/';
-        if (!isset($this->patterns[$pathinfo])) {
-            $response
-                ->withBody((new StreamFactory())->createStream('404 Not Found'))
-                ->withStatus(404)
-                ->end();
-            return;
-        }
         try {
             $conn = $this->upgrader->Upgrade($request, $response);
         } catch (\Throwable $e) {
@@ -122,6 +116,7 @@ class StartCommand
                 ->end();
             return;
         }
+        $pathinfo = $request->getServerParams()['path_info'] ?: '/';
         $class    = $this->patterns[$pathinfo];
         $callback = new $class($conn);
         call_user_func($callback);
@@ -146,7 +141,7 @@ class StartCommand
 
 
 EOL;
-        println('Server         Name:      mix-websocketd');
+        println('Server         Name:      mix-websocket');
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");

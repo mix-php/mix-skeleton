@@ -51,7 +51,7 @@ class StartCommand
     public function __construct()
     {
         $this->log      = context()->get('log');
-        $this->server   = context()->get('udpServer');
+        $this->server   = context()->get(Server::class);
         $this->sendChan = new Channel();
         $this->init();
     }
@@ -70,15 +70,16 @@ class StartCommand
 
     /**
      * 主函数
+     * @throws \Swoole\Exception
      */
     public function main()
     {
         // 参数重写
-        $host = Flag::string(['h', 'host'], '');
-        if ($host) {
-            $this->server->host = $host;
+        $addr = Flag::string(['a', 'addr'], '');
+        if ($addr) {
+            $this->server->address = $addr;
         }
-        $port = Flag::string(['p', 'port'], '');
+        $port = Flag::int(['p', 'port'], 0);
         if ($port) {
             $this->server->port = $port;
         }
@@ -100,6 +101,7 @@ class StartCommand
 
     /**
      * 启动服务器
+     * @throws \Swoole\Exception
      */
     public function start()
     {
@@ -173,7 +175,7 @@ class StartCommand
     {
         $phpVersion    = PHP_VERSION;
         $swooleVersion = swoole_version();
-        $host          = $this->server->host;
+        $addr          = $this->server->address;
         $port          = $this->server->port;
         echo <<<EOL
                               ____
@@ -185,12 +187,12 @@ class StartCommand
 
 
 EOL;
-        println('Server         Name:      mix-udpd');
+        println('Server         Name:      mix-udp');
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");
         println('Framework      Version:   ' . \Mix::$version);
-        println("Listen         Addr:      {$host}");
+        println("Listen         Addr:      {$addr}");
         println("Listen         Port:      {$port}");
     }
 

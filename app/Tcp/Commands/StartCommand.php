@@ -48,7 +48,7 @@ class StartCommand
     public function __construct()
     {
         $this->log    = context()->get('log');
-        $this->server = context()->get('tcpServer');
+        $this->server = context()->get(Server::class);
         $this->init();
     }
 
@@ -66,6 +66,7 @@ class StartCommand
 
     /**
      * 主函数
+     * @throws \Swoole\Exception
      */
     public function main()
     {
@@ -74,7 +75,7 @@ class StartCommand
         if ($host) {
             $this->server->host = $host;
         }
-        $port = Flag::string(['p', 'port'], '');
+        $port = Flag::int(['p', 'port'], 0);
         if ($port) {
             $this->server->port = $port;
         }
@@ -95,13 +96,12 @@ class StartCommand
 
     /**
      * 启动服务器
+     * @throws \Swoole\Exception
      */
     public function start()
     {
         $server = $this->server;
-        $server->handle(function (Connection $conn) {
-            $this->handle($conn);
-        });
+        $server->handle([$this, 'handle']);
         $server->set([
             'open_eof_check' => true,
             'package_eof'    => static::EOF,
@@ -144,7 +144,7 @@ class StartCommand
                 $this->runAction($sendChan, $data);
             } catch (\Throwable $e) {
                 // 忽略服务器主动断开连接异常
-                if ($e instanceof ReceiveException && in_array($e->getCode(),[54, 104])) { // mac=54, linux=104
+                if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104
                     return;
                 }
                 // 抛出异常
@@ -208,7 +208,7 @@ class StartCommand
 
 
 EOL;
-        println('Server         Name:      mix-tcpd');
+        println('Server         Name:      mix-tcp');
         println('System         Name:      ' . strtolower(PHP_OS));
         println("PHP            Version:   {$phpVersion}");
         println("Swoole         Version:   {$swooleVersion}");
