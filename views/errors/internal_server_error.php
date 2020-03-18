@@ -34,8 +34,8 @@
 
 <h1><span><?= $message ?></span></h1>
 
-<?php if (!empty($file)): ?>
 <p><?= $type ?> code <?= $code ?></p>
+<?php if (!empty($file)): ?>
 <p><span><?= $file ?></span> line <span><?= $line ?></span></p>
 <p><?= str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>

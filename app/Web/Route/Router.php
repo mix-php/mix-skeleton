@@ -21,6 +21,8 @@ class Router extends \Mix\Route\Router
     {
         $response = ResponseHelper::view($response, 'errors.not_found', [
             'message' => $exception->getMessage(),
+            'code'    => $exception->getCode(),
+            'type'    => get_class($exception),
         ]);
         $response->withStatus(404)->end();
     }
@@ -34,11 +36,8 @@ class Router extends \Mix\Route\Router
     {
         $response = ResponseHelper::view($response, 'errors.internal_server_error', [
             'message' => $exception->getMessage(),
-            'type'    => get_class($exception),
             'code'    => $exception->getCode(),
-            'file'    => $exception->getFile(),
-            'line'    => $exception->getLine(),
-            'trace'   => $exception->getTraceAsString(),
+            'type'    => get_class($exception),
         ]);
         $response->withStatus(500)->end();
     }
