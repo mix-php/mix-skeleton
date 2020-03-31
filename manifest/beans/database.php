@@ -13,13 +13,13 @@ return [
         // 属性注入
         'properties' => [
             // 最多可空闲连接数
-            'maxIdle'         => 5,
+            'maxIdle'    => 5,
             // 最大连接数
-            'maxActive'       => 50,
+            'maxActive'  => 50,
             // 拨号器
-            'dialer'          => ['ref' => \Mix\Database\Pool\Dialer::class],
+            'dialer'     => ['ref' => \Mix\Database\Pool\Dialer::class],
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 
@@ -30,20 +30,20 @@ return [
         // 属性注入
         'properties' => [
             // 数据源格式
-            'dsn'             => getenv('DATABASE_DSN'),
+            'dsn'        => getenv('DATABASE_DSN'),
             // 数据库用户名
-            'username'        => getenv('DATABASE_USERNAME'),
+            'username'   => getenv('DATABASE_USERNAME'),
             // 数据库密码
-            'password'        => getenv('DATABASE_PASSWORD'),
+            'password'   => getenv('DATABASE_PASSWORD'),
             // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-            'attributes'      => [
+            'attributes' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 // 超时
                 \PDO::ATTR_TIMEOUT            => 5,
             ],
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 
@@ -56,20 +56,20 @@ return [
         // 属性注入
         'properties' => [
             // 数据源格式
-            'dsn'             => getenv('DATABASE_DSN'),
+            'dsn'        => getenv('DATABASE_DSN'),
             // 数据库用户名
-            'username'        => getenv('DATABASE_USERNAME'),
+            'username'   => getenv('DATABASE_USERNAME'),
             // 数据库密码
-            'password'        => getenv('DATABASE_PASSWORD'),
+            'password'   => getenv('DATABASE_PASSWORD'),
             // 驱动连接选项: http://php.net/manual/zh/pdo.setattribute.php
-            'attributes'      => [
+            'attributes' => [
                 // 设置默认的提取模式: \PDO::FETCH_OBJ | \PDO::FETCH_ASSOC
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
                 // 超时
                 \PDO::ATTR_TIMEOUT            => 5,
             ],
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 

@@ -13,13 +13,13 @@ return [
         // 属性注入
         'properties' => [
             // 最多可空闲连接数
-            'maxIdle'         => 5,
+            'maxIdle'    => 5,
             // 最大连接数
-            'maxActive'       => 50,
+            'maxActive'  => 50,
             // 拨号器
-            'dialer'          => ['ref' => \Mix\Redis\Pool\Dialer::class],
+            'dialer'     => ['ref' => \Mix\Redis\Pool\Dialer::class],
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 
@@ -30,17 +30,17 @@ return [
         // 属性注入
         'properties' => [
             // 主机
-            'host'            => getenv('REDIS_HOST'),
+            'host'       => getenv('REDIS_HOST'),
             // 端口
-            'port'            => getenv('REDIS_PORT'),
+            'port'       => getenv('REDIS_PORT'),
             // 数据库
-            'database'        => getenv('REDIS_DATABASE'),
+            'database'   => getenv('REDIS_DATABASE'),
             // 密码
-            'password'        => getenv('REDIS_PASSWORD'),
+            'password'   => getenv('REDIS_PASSWORD'),
             // 超时
-            'timeout'         => 5,
+            'timeout'    => 5,
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 
@@ -53,17 +53,17 @@ return [
         // 属性注入
         'properties' => [
             // 主机
-            'host'            => getenv('REDIS_HOST'),
+            'host'       => getenv('REDIS_HOST'),
             // 端口
-            'port'            => getenv('REDIS_PORT'),
+            'port'       => getenv('REDIS_PORT'),
             // 数据库
-            'database'        => getenv('REDIS_DATABASE'),
+            'database'   => getenv('REDIS_DATABASE'),
             // 密码
-            'password'        => getenv('REDIS_PASSWORD'),
+            'password'   => getenv('REDIS_PASSWORD'),
             // 超时
-            'timeout'         => 5,
+            'timeout'    => 5,
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 

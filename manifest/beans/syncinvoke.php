@@ -11,13 +11,13 @@ return [
         // 属性注入
         'properties' => [
             // 最多可空闲连接数
-            'maxIdle'         => 5,
+            'maxIdle'    => 5,
             // 最大连接数
-            'maxActive'       => 50,
+            'maxActive'  => 50,
             // 拨号器
-            'dialer'          => ['ref' => \Mix\SyncInvoke\Pool\Dialer::class],
+            'dialer'     => ['ref' => \Mix\SyncInvoke\Pool\Dialer::class],
             // 事件调度器
-            'eventDispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'event'],
         ],
     ],
 
