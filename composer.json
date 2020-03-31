@@ -39,6 +39,7 @@
     "mix/websocket": "~2.1.0",
     "mix/sync-invoke": "~2.1.0",
     "mix/json-rpc": "~2.1.0",
+    "mix/guzzle": "~2.1.0",
     "symfony/dotenv": "~4.3",
     "hassankhan/config": "^2.1"
   },
