@@ -14,10 +14,10 @@ class Router extends \Mix\Route\Router
 
     /**
      * 404 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      */
-    public function show404(\Exception $exception, Response $response)
+    public function show404(\Throwable $exception, Response $response)
     {
         $content = [
             'code'    => $exception->getCode(),
@@ -34,10 +34,10 @@ class Router extends \Mix\Route\Router
 
     /**
      * 500 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      */
-    public function show500(\Exception $exception, Response $response)
+    public function show500(\Throwable $exception, Response $response)
     {
         $content = [
             'code'    => $exception->getCode(),

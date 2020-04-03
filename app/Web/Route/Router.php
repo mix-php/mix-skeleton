@@ -14,10 +14,10 @@ class Router extends \Mix\Route\Router
 
     /**
      * 404 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      */
-    public function show404(\Exception $exception, Response $response)
+    public function show404(\Throwable $exception, Response $response)
     {
         $response = ResponseHelper::view($response, 'errors.not_found', [
             'message' => $exception->getMessage(),
@@ -29,10 +29,10 @@ class Router extends \Mix\Route\Router
 
     /**
      * 500 处理
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param Response $response
      */
-    public function show500(\Exception $exception, Response $response)
+    public function show500(\Throwable $exception, Response $response)
     {
         $response = ResponseHelper::view($response, 'errors.internal_server_error', [
             'message' => $exception->getMessage(),
