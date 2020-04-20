@@ -20,7 +20,7 @@ class SyncInvokeListener implements ListenerInterface
     public $log;
 
     /**
-     * JsonRpcListener constructor.
+     * SyncInvokeListener constructor.
      */
     public function __construct()
     {
