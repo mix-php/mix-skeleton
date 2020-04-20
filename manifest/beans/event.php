@@ -15,7 +15,6 @@ return [
             \App\Common\Listeners\CommandListener::class,
             \App\Common\Listeners\DatabaseListener::class,
             \App\Common\Listeners\RedisListener::class,
-            \App\JsonRpc\Listeners\JsonRpcListener::class,
             \App\SyncInvoke\Listeners\SyncInvokeListener::class,
         ],
     ],
