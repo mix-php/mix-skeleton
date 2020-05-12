@@ -1,11 +1,10 @@
 {
   "name": "mix/mix-skeleton",
-  "description": "全功能开发骨架 / Full-featured development skeleton (http://mixphp.cn)",
+  "description": "Full-featured development skeleton",
   "type": "project",
   "keywords": [
-    "framework",
     "mix",
-    "swoole"
+    "skeleton"
   ],
   "homepage": "http://www.mixphp.cn/",
   "license": "Apache-2.0",
