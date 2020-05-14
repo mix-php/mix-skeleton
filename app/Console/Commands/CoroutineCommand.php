@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Mix\Database\Database;
 use Swoole\Coroutine\Channel;
-use Mix\Database\Pool\ConnectionPool;
 
 /**
  * Class CoroutineCommand
@@ -35,11 +35,9 @@ class CoroutineCommand
      */
     public function foo(Channel $chan)
     {
-        /** @var ConnectionPool $dbPool */
-        $dbPool = context()->get('dbPool');
-        $db     = $dbPool->getConnection();
+        /** @var Database $db */
+        $db     = context()->get('database');
         $result = $db->prepare('select sleep(5)')->queryAll();
-        $db->release(); // 不手动释放的连接不会归还连接池，会在析构时丢弃
         $chan->push($result);
     }
 

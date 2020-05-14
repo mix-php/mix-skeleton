@@ -17,6 +17,11 @@ return [
             // 日志
             ['ref' => 'log'],
         ],
+        // 属性注入
+        'properties'      => [
+            // 事件调度器
+            'dispatcher' => ['ref' => 'event'],
+        ],
     ],
 
 ];

@@ -4,7 +4,8 @@ namespace App\SyncInvoke\Commands;
 
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
-use Mix\Log\Logger;
+use Mix\Monolog\Logger;
+use Mix\Monolog\Handler\RotatingFileHandler;
 use Mix\SyncInvoke\Server;
 
 /**
@@ -32,6 +33,10 @@ class StartCommand
     {
         $this->log    = context()->get('log');
         $this->server = context()->get(Server::class);
+        // 设置日志处理器
+        $this->log->withName('SYNCINVOKE');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/syncinvoke.log', app()->basePath), 7);
+        $this->log->pushHandler($handler);
     }
 
     /**

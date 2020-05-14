@@ -3,23 +3,23 @@
 namespace App\Console\Workers;
 
 use Mix\Concurrent\CoroutinePool\AbstractWorker;
-use Mix\Concurrent\CoroutinePool\WorkerInterface;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class CoroutinePoolWorker
  * @package App\Console\Libraries
  * @author liu,jian <coder.keda@gmail.com>
  */
-class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
+class CoroutinePoolWorker extends AbstractWorker
 {
-    
+
     /**
      * CoroutinePoolWorker constructor.
-     * @param array $config
+     * @param Channel $workerPool
      */
-    public function __construct(array $config)
+    public function __construct(Channel $workerPool)
     {
-        parent::__construct($config);
+        parent::__construct($workerPool);
         // 实例化一些需重用的对象
         // ...
     }
@@ -30,7 +30,6 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
      */
     public function handle($data)
     {
-        // TODO: Implement handle() method.
         var_dump($data);
     }
 

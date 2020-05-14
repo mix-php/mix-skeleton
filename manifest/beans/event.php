@@ -15,7 +15,7 @@ return [
             \App\Common\Listeners\CommandListener::class,
             \App\Common\Listeners\DatabaseListener::class,
             \App\Common\Listeners\RedisListener::class,
-            \App\SyncInvoke\Listeners\SyncInvokeListener::class,
+            \App\Common\Listeners\SyncInvokeServerListener::class,
         ],
     ],
 

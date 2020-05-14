@@ -2,15 +2,16 @@
 
 namespace App\Tcp\Commands;
 
-use Swoole\Coroutine\Channel;
+use Mix\Monolog\Handler\RotatingFileHandler;
+use Mix\Monolog\Logger;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
-use Mix\Log\Logger;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
 use Mix\Server\Server;
 use App\Tcp\Exceptions\ExecutionException;
 use App\Tcp\Helpers\SendHelper;
+use Swoole\Coroutine\Channel;
 
 /**
  * Class StartCommand
@@ -62,6 +63,10 @@ class StartCommand
             list($class, $action) = $callback;
             $this->methods[$method] = [new $class, $action];
         }
+        // 设置日志处理器
+        $this->log->withName('TCP');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/tcp.log', app()->basePath), 7);
+        $this->log->pushHandler($handler);
     }
 
     /**

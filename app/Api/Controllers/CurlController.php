@@ -3,10 +3,9 @@
 namespace App\Api\Controllers;
 
 use App\Common\Helpers\ResponseHelper;
-use App\SyncInvoke\Helpers\SyncInvokeHelper;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\SyncInvoke\Pool\ConnectionPool;
+use Mix\SyncInvoke\Client\Client;
 
 /**
  * Class CurlController
@@ -17,16 +16,16 @@ class CurlController
 {
 
     /**
-     * @var ConnectionPool
+     * @var Client
      */
-    public $pool;
+    public $client;
 
     /**
      * CurlController constructor.
      */
-    public function __construct(ServerRequest $request, Response $response)
+    public function __construct()
     {
-        $this->pool = context()->get(ConnectionPool::class);
+        $this->client = context()->get(Client::class);
     }
 
     /**
@@ -40,7 +39,7 @@ class CurlController
     public function index(ServerRequest $request, Response $response)
     {
         // 跨进程执行同步代码
-        $data = SyncInvokeHelper::invoke($this->pool, function () {
+        $data = $this->client->invoke(function () {
             /**
              * 闭包内部的同步阻塞代码会在同步服务器进程中执行
              * 代码异常会抛出 InvokeException，即便指定 throw new FooException() 也会转换为 InvokeException

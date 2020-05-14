@@ -17,15 +17,6 @@ class UserController
 {
 
     /**
-     * FileController constructor.
-     * @param ServerRequest $request
-     * @param Response $response
-     */
-    public function __construct(ServerRequest $request, Response $response)
-    {
-    }
-
-    /**
      * Create
      * @param ServerRequest $request
      * @param Response $response

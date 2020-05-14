@@ -6,7 +6,8 @@ use App\Api\Route\Router;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Http\Server\Server;
-use Mix\Log\Logger;
+use Mix\Monolog\Handler\RotatingFileHandler;
+use Mix\Monolog\Logger;
 
 /**
  * Class StartCommand
@@ -39,6 +40,10 @@ class StartCommand
         $this->log    = context()->get('log');
         $this->route  = context()->get('apiRoute');
         $this->server = context()->get(Server::class);
+        // 设置日志处理器
+        $this->log->withName('API');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/api.log', app()->basePath), 7);
+        $this->log->pushHandler($handler);
     }
 
     /**

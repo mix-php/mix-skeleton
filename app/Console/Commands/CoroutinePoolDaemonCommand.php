@@ -4,9 +4,9 @@ namespace App\Console\Commands;
 
 use App\Console\Workers\CoroutinePoolDaemonWorker;
 use Mix\Concurrent\CoroutinePool\Dispatcher;
+use Mix\Redis\Redis;
 use Swoole\Coroutine\Channel;
 use Mix\Helper\ProcessHelper;
-use Mix\Redis\Pool\ConnectionPool;
 
 /**
  * Class CoroutinePoolDaemonCommand
@@ -23,20 +23,22 @@ class CoroutinePoolDaemonCommand
     public $quit = false;
 
     /**
-     * @var ConnectionPool
+     * @var Redis
      */
-    public $pool;
+    public $redis;
 
     /**
      * CoroutinePoolDaemonCommand constructor.
      */
     public function __construct()
     {
-        $this->pool = context()->get('redisPool');
+        $this->redis = context()->get('redis');
     }
 
     /**
      * 主函数
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
     public function main()
     {
@@ -45,16 +47,11 @@ class CoroutinePoolDaemonCommand
             $this->quit = true;
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
-        // 获取连接
-        $redis = $this->pool->getConnection();
         // 协程池执行任务
         $maxWorkers = 20;
         $maxQueue   = 20;
         $jobQueue   = new Channel($maxQueue);
-        $dispatch   = new Dispatcher([
-            'jobQueue'   => $jobQueue,
-            'maxWorkers' => $maxWorkers,
-        ]);
+        $dispatch   = new Dispatcher($jobQueue, $maxWorkers);
         $dispatch->start(CoroutinePoolDaemonWorker::class);
         // 投放任务
         while (true) {
@@ -63,7 +60,7 @@ class CoroutinePoolDaemonCommand
                 return;
             }
             try {
-                $data = $redis->brPop(['test'], 3);
+                $data = $this->redis->brPop(['test'], 3);
             } catch (\Throwable $e) {
                 $dispatch->stop();
                 return;

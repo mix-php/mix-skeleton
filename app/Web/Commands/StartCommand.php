@@ -5,7 +5,8 @@ namespace App\Web\Commands;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Http\Server\Server;
-use Mix\Log\Logger;
+use Mix\Monolog\Logger;
+use Mix\Monolog\Handler\RotatingFileHandler;
 use Mix\Route\Router;
 
 /**
@@ -39,6 +40,10 @@ class StartCommand
         $this->log    = context()->get('log');
         $this->route  = context()->get('webRoute');
         $this->server = context()->get(Server::class);
+        // 设置日志处理器
+        $this->log->withName('WEB');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/web.log', app()->basePath), 7);
+        $this->log->pushHandler($handler);
     }
 
     /**

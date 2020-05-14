@@ -16,16 +16,15 @@ class CoroutinePoolCommand
 
     /**
      * 主函数
+     * @throws \PhpDocReader\AnnotationException
+     * @throws \ReflectionException
      */
     public function main()
     {
         $maxWorkers = 20;
         $maxQueue   = 10;
         $jobQueue   = new Channel($maxQueue);
-        $dispatch   = new Dispatcher([
-            'jobQueue'   => $jobQueue,
-            'maxWorkers' => $maxWorkers,
-        ]);
+        $dispatch   = new Dispatcher($jobQueue, $maxWorkers);
         $dispatch->start(CoroutinePoolWorker::class);
         // 投放任务
         for ($i = 0; $i < 1000; $i++) {

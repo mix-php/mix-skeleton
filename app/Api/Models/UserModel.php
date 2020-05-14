@@ -3,7 +3,7 @@
 namespace App\Api\Models;
 
 use App\Api\Forms\UserForm;
-use Mix\Database\Pool\ConnectionPool;
+use Mix\Database\Database;
 
 /**
  * Class UserModel
@@ -14,16 +14,16 @@ class UserModel
 {
 
     /**
-     * @var ConnectionPool
+     * @var Database
      */
-    public $pool;
+    public $db;
 
     /**
      * UserModel constructor.
      */
     public function __construct()
     {
-        $this->pool = context()->get('dbPool');
+        $this->db = context()->get('database');
     }
 
     /**
@@ -33,14 +33,13 @@ class UserModel
      */
     public function add(UserForm $form)
     {
-        $db       = $this->pool->getConnection();
-        $status   = $db->insert('user', [
+        $conn     = $this->db->insert('user', [
             'name'  => $form->name,
             'age'   => $form->age,
             'email' => $form->email,
-        ])->execute();
-        $insertId = $status ? $db->getLastInsertId() : false;
-        $db->release();
+        ]);
+        $status   = $conn->execute();
+        $insertId = $status ? $conn->getLastInsertId() : false;
         return $insertId;
     }
 

@@ -2,33 +2,24 @@
 
 return [
 
-    // SyncInvoke连接池
+    // SyncInvoke客户端
     [
         // 作用域
         'scope'      => \Mix\Bean\BeanDefinition::SINGLETON,
         // 类路径
-        'class'      => \Mix\SyncInvoke\Pool\ConnectionPool::class,
+        'class'      => \Mix\SyncInvoke\Client\Client::class,
+        // 初始方法
+        'initMethod' => 'init',
         // 属性注入
         'properties' => [
+            // 端口
+            'port'      => 9505,
+            // 超时
+            'timeout'   => 5.0,
             // 最多可空闲连接数
-            'maxIdle'    => 5,
+            'maxIdle'   => 5,
             // 最大连接数
-            'maxActive'  => 50,
-            // 拨号器
-            'dialer'     => ['ref' => \Mix\SyncInvoke\Pool\Dialer::class],
-            // 事件调度器
-            'dispatcher' => ['ref' => 'event'],
-        ],
-    ],
-
-    // SyncInvoke连接池拨号器
-    [
-        // 类路径
-        'class'      => \Mix\SyncInvoke\Pool\Dialer::class,
-        // 属性注入
-        'properties' => [
-            // port
-            'port' => 9505,
+            'maxActive' => 50,
         ],
     ],
 
