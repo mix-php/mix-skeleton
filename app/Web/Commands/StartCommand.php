@@ -57,7 +57,7 @@ class StartCommand
         if ($host) {
             $this->server->host = $host;
         }
-        $port = Flag::int(['p', 'port'], 0);
+        $port = Flag::int(['p', 'port'], 9501);
         if ($port) {
             $this->server->port = $port;
         }
