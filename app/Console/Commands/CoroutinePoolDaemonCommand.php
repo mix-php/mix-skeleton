@@ -61,7 +61,8 @@ class CoroutinePoolDaemonCommand
             }
             try {
                 $data = $this->redis->brPop(['test'], 3);
-            } catch (\Throwable $e) {
+            } catch (\Throwable $ex) {
+                println(sprintf('Error: [%d] %s %s', $ex->getCode(), $ex->getMessage(), get_class($ex)));
                 $dispatch->stop();
                 return;
             }
