@@ -2,14 +2,14 @@
 
 return [
 
-    'tcp:start' => [
+    'tcp' => [
         \App\Tcp\Commands\StartCommand::class,
-        'description' => "Start service",
-        'options'     => [
-            [['d', 'daemon'], 'description' => "\tRun in the background"],
-            [['h', 'host'], 'description' => "\tListen to the specified host"],
-            [['p', 'port'], 'description' => "\tListen to the specified port"],
-            [['r', 'reuse-port'], 'description' => "Reuse port in multiple processes"],
+        'usage'   => "\tStart the tcp server",
+        'options' => [
+            [['d', 'daemon'], 'usage' => "\tRun in the background"],
+            [['h', 'host'], 'usage' => "\tListen to the specified host"],
+            [['p', 'port'], 'usage' => "\tListen to the specified port"],
+            [['r', 'reuse-port'], 'usage' => "Reuse port in multiple processes"],
         ],
     ],
 

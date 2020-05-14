@@ -2,14 +2,14 @@
 
 return [
 
-    'udp:start' => [
+    'udp' => [
         \App\Udp\Commands\StartCommand::class,
-        'description' => "Start service",
-        'options'     => [
-            [['d', 'daemon'], 'description' => "\tRun in the background"],
-            [['a', 'addr'], 'description' => "\tListen to the specified address"],
-            [['p', 'port'], 'description' => "\tListen to the specified port"],
-            [['r', 'reuse-port'], 'description' => "Reuse port in multiple processes"],
+        'usage'   => "\tStart the udp server",
+        'options' => [
+            [['d', 'daemon'], 'usage' => "\tRun in the background"],
+            [['a', 'addr'], 'usage' => "\tListen to the specified address"],
+            [['p', 'port'], 'usage' => "\tListen to the specified port"],
+            [['r', 'reuse-port'], 'usage' => "Reuse port in multiple processes"],
         ],
     ],
 
