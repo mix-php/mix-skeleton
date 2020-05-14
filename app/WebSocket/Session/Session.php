@@ -52,6 +52,7 @@ class Session
 
     /**
      * 清除
+     * @throws \Swoole\Exception
      */
     public function clear()
     {

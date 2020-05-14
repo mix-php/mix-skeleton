@@ -7,13 +7,15 @@ use Mix\Helper\ProcessHelper;
 use Mix\Http\Message\Factory\StreamFactory;
 use Mix\Http\Message\Response;
 use Mix\Http\Message\ServerRequest;
-use Mix\Log\Logger;
 use Mix\Http\Server\Server;
+use Mix\Monolog\Logger;
+use Mix\Monolog\Handler\RotatingFileHandler;
+use Mix\Route\Router;
 use Mix\WebSocket\Upgrader;
 
 /**
  * Class StartCommand
- * @package App\Tcp\Commands
+ * @package App\WebSocket\Commands
  * @author liu,jian <coder.keda@gmail.com>
  */
 class StartCommand
@@ -30,11 +32,9 @@ class StartCommand
     public $log;
 
     /**
-     * @var callable[]
+     * @var Router
      */
-    public $patterns = [
-        '/websocket' => \App\WebSocket\Handlers\WebSocketHandler::class,
-    ];
+    public $route;
 
     /**
      * @var Upgrader
@@ -47,8 +47,13 @@ class StartCommand
     public function __construct()
     {
         $this->log      = context()->get('log');
+        $this->route    = context()->get('webSocketRoute');
         $this->server   = context()->get(Server::class);
-        $this->upgrader = new Upgrader();
+        $this->upgrader = context()->get(Upgrader::class);
+        // 设置日志处理器
+        $this->log->withName('WEBSOCKET');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/websocket.log', app()->basePath), 7);
+        $this->log->pushHandler($handler);
     }
 
     /**
@@ -89,15 +94,12 @@ class StartCommand
     public function start()
     {
         $server = $this->server;
-        foreach (array_keys($this->patterns) as $pattern) {
-            $server->handle($pattern, [$this, 'handle']);
-        }
         $server->set([
             //...
         ]);
         $this->welcome();
         $this->log->info('server start');
-        $server->start();
+        $server->start($this->route);
     }
 
     /**

@@ -6,8 +6,8 @@ use Swoole\Coroutine\Channel;
 use Mix\WebSocket\Connection;
 use Mix\WebSocket\Exception\CloseFrameException;
 use Mix\WebSocket\Exception\ReceiveException;
-use App\WebSocket\Controllers\JoinController;
-use App\WebSocket\Controllers\MessageController;
+use App\WebSocket\Services\JoinController;
+use App\WebSocket\Services\MessageController;
 use App\WebSocket\Exceptions\ExecutionException;
 use App\WebSocket\Helpers\SendHelper;
 use App\WebSocket\Session\Session;
@@ -52,14 +52,6 @@ class WebSocketHandler
         $this->conn     = $conn;
         $this->sendChan = new Channel();
         $this->session  = new Session($this->sendChan, $this->conn);
-        $this->init();
-    }
-
-    /**
-     * 初始化
-     */
-    public function init()
-    {
         // 实例化控制器
         foreach ($this->methods as $method => $callback) {
             list($class, $action) = $callback;
@@ -69,6 +61,8 @@ class WebSocketHandler
 
     /**
      * Invoke
+     * @throws \Swoole\Exception
+     * @throws \Throwable
      */
     function __invoke()
     {
@@ -91,7 +85,7 @@ class WebSocketHandler
         while (true) {
             try {
                 $frame = $this->conn->recv();
-                $this->runAction($frame->data);
+                $this->call($frame->data);
             } catch (\Throwable $e) {
                 // 清理会话资源
                 $this->session->clear();
@@ -110,10 +104,10 @@ class WebSocketHandler
     }
 
     /**
-     * 执行功能
+     * 调用
      * @param $data
      */
-    public function runAction($data)
+    public function call($data)
     {
         // 解析数据
         $data = json_decode($data);
