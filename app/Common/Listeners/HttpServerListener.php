@@ -23,7 +23,7 @@ class HttpServerListener implements ListenerInterface
      */
     public function __construct()
     {
-        $this->log = context()->get('log');
+        $this->log = context()->get('logger');
     }
 
     /**

@@ -29,7 +29,7 @@ class StartCommand
     /**
      * @var Logger
      */
-    public $log;
+    public $logger;
 
     /**
      * @var callable[]
@@ -48,7 +48,7 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log    = context()->get('log');
+        $this->logger = context()->get('logger');
         $this->server = context()->get(Server::class);
         $this->init();
     }
@@ -64,9 +64,9 @@ class StartCommand
             $this->methods[$method] = [new $class, $action];
         }
         // 设置日志处理器
-        $this->log->withName('TCP');
+        $this->logger->withName('TCP');
         $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/tcp.log', app()->basePath), 7);
-        $this->log->pushHandler($handler);
+        $this->logger->pushHandler($handler);
     }
 
     /**
@@ -90,8 +90,8 @@ class StartCommand
         }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->log->info('received signal [{signal}]', ['signal' => $signal]);
-            $this->log->info('server shutdown');
+            $this->logger->info('received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('server shutdown');
             $this->server->shutdown();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
@@ -112,7 +112,7 @@ class StartCommand
             'package_eof'    => static::EOF,
         ]);
         $this->welcome();
-        $this->log->info('server start');
+        $this->logger->info('server start');
         $server->start();
     }
 

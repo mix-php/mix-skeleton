@@ -5,7 +5,7 @@ return [
     // 日志
     [
         // 名称
-        'name'            => 'log',
+        'name'            => 'logger',
         // 作用域
         'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
         // 类路径

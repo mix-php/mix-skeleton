@@ -27,7 +27,7 @@ class StartCommand
     /**
      * @var Logger
      */
-    public $log;
+    public $logger;
 
     /**
      * @var Channel
@@ -51,7 +51,7 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log      = context()->get('log');
+        $this->logger   = context()->get('logger');
         $this->server   = context()->get(Server::class);
         $this->sendChan = new Channel();
         $this->init();
@@ -68,9 +68,9 @@ class StartCommand
             $this->methods[$method] = [new $class, $action];
         }
         // 设置日志处理器
-        $this->log->withName('UDP');
+        $this->logger->withName('UDP');
         $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/udp.log', app()->basePath), 7);
-        $this->log->pushHandler($handler);
+        $this->logger->pushHandler($handler);
     }
 
     /**
@@ -94,8 +94,8 @@ class StartCommand
         }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->log->info('received signal [{signal}]', ['signal' => $signal]);
-            $this->log->info('server shutdown');
+            $this->logger->info('received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('server shutdown');
             $this->server->shutdown();
             $this->sendChan->close();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
@@ -132,7 +132,7 @@ class StartCommand
             $this->handle($this->sendChan, $data, $peer);
         });
         $this->welcome();
-        $this->log->info('server start');
+        $this->logger->info('server start');
         $server->start();
     }
 

@@ -4,9 +4,6 @@ namespace App\WebSocket\Commands;
 
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
-use Mix\Http\Message\Factory\StreamFactory;
-use Mix\Http\Message\Response;
-use Mix\Http\Message\ServerRequest;
 use Mix\Http\Server\Server;
 use Mix\Monolog\Logger;
 use Mix\Monolog\Handler\RotatingFileHandler;
@@ -29,12 +26,12 @@ class StartCommand
     /**
      * @var Logger
      */
-    public $log;
+    public $logger;
 
     /**
      * @var Router
      */
-    public $route;
+    public $router;
 
     /**
      * @var Upgrader
@@ -46,14 +43,14 @@ class StartCommand
      */
     public function __construct()
     {
-        $this->log      = context()->get('log');
-        $this->route    = context()->get('webSocketRoute');
+        $this->logger   = context()->get('logger');
+        $this->router   = context()->get('webSocketRouter');
         $this->server   = context()->get(Server::class);
         $this->upgrader = context()->get(Upgrader::class);
         // 设置日志处理器
-        $this->log->withName('WEBSOCKET');
+        $this->logger->withName('WEBSOCKET');
         $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/websocket.log', app()->basePath), 7);
-        $this->log->pushHandler($handler);
+        $this->logger->pushHandler($handler);
     }
 
     /**
@@ -77,8 +74,8 @@ class StartCommand
         }
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->log->info('received signal [{signal}]', ['signal' => $signal]);
-            $this->log->info('server shutdown');
+            $this->logger->info('received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('server shutdown');
             $this->server->shutdown();
             $this->upgrader->destroy();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
@@ -93,35 +90,9 @@ class StartCommand
      */
     public function start()
     {
-        $server = $this->server;
-        $server->set([
-            //...
-        ]);
         $this->welcome();
-        $this->log->info('server start');
-        $server->start($this->route);
-    }
-
-    /**
-     * 请求处理
-     * @param ServerRequest $request
-     * @param Response $response
-     */
-    public function handle(ServerRequest $request, Response $response)
-    {
-        try {
-            $conn = $this->upgrader->Upgrade($request, $response);
-        } catch (\Throwable $e) {
-            $response
-                ->withBody((new StreamFactory())->createStream('401 Unauthorized'))
-                ->withStatus(401)
-                ->end();
-            return;
-        }
-        $pathinfo = $request->getServerParams()['path_info'] ?: '/';
-        $class    = $this->patterns[$pathinfo];
-        $callback = new $class($conn);
-        call_user_func($callback);
+        $this->logger->info('server start');
+        $this->server->start($this->router);
     }
 
     /**

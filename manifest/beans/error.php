@@ -15,7 +15,7 @@ return [
             // 错误级别
             E_ALL,
             // 日志
-            ['ref' => 'log'],
+            ['ref' => 'logger'],
         ],
         // 属性注入
         'properties'      => [
