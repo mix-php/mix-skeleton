@@ -29,7 +29,7 @@ class Router extends \Mix\Route\Router
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
             ->withStatus(404)
-            ->end();
+            ->send();
     }
 
     /**
@@ -49,7 +49,7 @@ class Router extends \Mix\Route\Router
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
             ->withStatus(500)
-            ->end();
+            ->send();
     }
 
 }
