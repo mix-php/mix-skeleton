@@ -54,19 +54,13 @@ class StartCommand
         $this->logger   = context()->get('logger');
         $this->server   = context()->get(Server::class);
         $this->sendChan = new Channel();
-        $this->init();
-    }
 
-    /**
-     * 初始化
-     */
-    public function init()
-    {
         // 实例化控制器
         foreach ($this->methods as $method => $callback) {
             list($class, $action) = $callback;
             $this->methods[$method] = [new $class, $action];
         }
+
         // 设置日志处理器
         $this->logger->withName('UDP');
         $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/udp.log', app()->basePath), 7);
@@ -92,58 +86,50 @@ class StartCommand
         if ($reusePort) {
             $this->server->reusePort = $reusePort;
         }
+
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->logger->info('received signal [{signal}]', ['signal' => $signal]);
-            $this->logger->info('server shutdown');
+            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('Server shutdown');
             $this->server->shutdown();
             $this->sendChan->close();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
-        // 启动服务器
-        $this->start();
-    }
 
-    /**
-     * 启动服务器
-     * @throws \Swoole\Exception
-     */
-    public function start()
-    {
+        $this->welcome();
+
         // 消息发送
         xgo(function () {
             while (true) {
-                $res = $this->sendChan->pop();
-                if (!$res) {
+                $result = $this->sendChan->pop();
+                if (!$result) {
                     return;
                 }
                 try {
-                    list($data, $peer) = $res;
+                    list($data, $peer) = $result;
                     $this->server->send($data . static::EOF, $peer['port'], $peer['address']);
-                } catch (\Throwable $e) {
+                } catch (\Throwable $ex) {
                     $this->server->shutdown();
-                    throw $e;
+                    throw $ex;
                 }
             }
         });
-        // 消息处理
+
+        // 启动服务器
         $server = $this->server;
-        $server->handle(function (string $data, array $peer) {
-            $this->handle($this->sendChan, $data, $peer);
-        });
-        $this->welcome();
-        $this->logger->info('server start');
+        $server->handle([$this, 'handle']);
+        $this->logger->info('Server start');
         $server->start();
     }
 
     /**
      * 消息处理
-     * @param Channel $sendChan
      * @param string $data
      * @param array $peer
      */
-    public function handle(Channel $sendChan, string $data, array $peer)
+    public function handle(string $data, array $peer)
     {
+        $sendChan = $this->sendChan;
         // 解析数据
         $data = json_decode($data, true);
         if (!$data) {

@@ -50,19 +50,13 @@ class StartCommand
     {
         $this->logger = context()->get('logger');
         $this->server = context()->get(Server::class);
-        $this->init();
-    }
 
-    /**
-     * 初始化
-     */
-    public function init()
-    {
         // 实例化控制器
         foreach ($this->methods as $method => $callback) {
             list($class, $action) = $callback;
             $this->methods[$method] = [new $class, $action];
         }
+
         // 设置日志处理器
         $this->logger->withName('TCP');
         $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/tcp.log', app()->basePath), 7);
@@ -88,31 +82,25 @@ class StartCommand
         if ($reusePort) {
             $this->server->reusePort = $reusePort;
         }
+
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->logger->info('received signal [{signal}]', ['signal' => $signal]);
-            $this->logger->info('server shutdown');
+            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('Server shutdown');
             $this->server->shutdown();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
-        // 启动服务器
-        $this->start();
-    }
 
-    /**
-     * 启动服务器
-     * @throws \Swoole\Exception
-     */
-    public function start()
-    {
+        $this->welcome();
+
+        // 启动服务器
         $server = $this->server;
         $server->handle([$this, 'handle']);
         $server->set([
             'open_eof_check' => true,
             'package_eof'    => static::EOF,
         ]);
-        $this->welcome();
-        $this->logger->info('server start');
+        $this->logger->info('Server start');
         $server->start();
     }
 
@@ -136,9 +124,9 @@ class StartCommand
                 }
                 try {
                     $conn->send($data);
-                } catch (\Throwable $e) {
+                } catch (\Throwable $ex) {
                     $conn->close();
-                    throw $e;
+                    throw $ex;
                 }
             }
         });
@@ -146,14 +134,14 @@ class StartCommand
         while (true) {
             try {
                 $data = $conn->recv();
-                $this->runAction($sendChan, $data);
-            } catch (\Throwable $e) {
+                $this->call($sendChan, $data);
+            } catch (\Throwable $ex) {
                 // 忽略服务器主动断开连接异常
-                if ($e instanceof ReceiveException && in_array($e->getCode(), [54, 104])) { // mac=54, linux=104
+                if ($ex instanceof ReceiveException && in_array($ex->getCode(), [54, 104])) { // mac=54, linux=104
                     return;
                 }
                 // 抛出异常
-                throw $e;
+                throw $ex;
             }
         }
     }
@@ -163,7 +151,7 @@ class StartCommand
      * @param Channel $sendChan
      * @param string $data
      */
-    public function runAction(Channel $sendChan, string $data)
+    public function call(Channel $sendChan, string $data)
     {
         // 解析数据
         $data = json_decode($data, true);

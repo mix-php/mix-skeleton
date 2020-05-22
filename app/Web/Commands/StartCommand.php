@@ -40,6 +40,7 @@ class StartCommand
         $this->logger = context()->get('logger');
         $this->router = context()->get('webRouter');
         $this->server = context()->get(Server::class);
+
         // 设置日志处理器
         $this->logger->withName('WEB');
         $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/web.log', app()->basePath), 7);
@@ -65,30 +66,24 @@ class StartCommand
         if ($reusePort) {
             $this->server->reusePort = $reusePort;
         }
+
         // 捕获信号
         ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
-            $this->logger->info('received signal [{signal}]', ['signal' => $signal]);
-            $this->logger->info('server shutdown');
+            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('Server shutdown');
             $this->server->shutdown();
             ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
         });
-        // 启动服务器
-        $this->start();
-    }
 
-    /**
-     * 启动服务器
-     * @throws \Swoole\Exception
-     */
-    public function start()
-    {
+        $this->welcome();
+
+        // 启动服务器
         $server = $this->server;
         $server->set([
             'document_root'         => app()->basePath . '/public',
             'enable_static_handler' => false, // 此功能较为简易，请勿在公网环境直接使用，正式环境请使用 nginx 处理静态文件
         ]);
-        $this->welcome();
-        $this->logger->info('server start');
+        $this->logger->info('Server start');
         $server->start($this->router);
     }
 
