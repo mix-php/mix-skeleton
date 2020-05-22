@@ -15,6 +15,11 @@ return [
             // ssl
             false,
         ],
+        // 属性注入
+        'properties'      => [
+            // 事件调度器
+            'dispatcher' => ['ref' => 'event'],
+        ],
     ],
 
     // Tcp服务器

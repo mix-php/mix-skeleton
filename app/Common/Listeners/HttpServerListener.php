@@ -16,14 +16,14 @@ class HttpServerListener implements ListenerInterface
     /**
      * @var LoggerInterface
      */
-    public $log;
+    public $logger;
 
     /**
      * JsonRpcListener constructor.
      */
     public function __construct()
     {
-        $this->log = context()->get('logger');
+        $this->logger = context()->get('logger');
     }
 
     /**
@@ -57,7 +57,7 @@ class HttpServerListener implements ListenerInterface
             'status' => $event->response->getStatusCode(),
             'error'  => $event->error,
         ];
-        $this->log->log($level, $message, $context);
+        $this->logger->log($level, $message, $context);
     }
 
 }
