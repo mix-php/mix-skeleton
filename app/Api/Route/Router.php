@@ -16,8 +16,9 @@ class Router extends \Mix\Route\Router
      * 404 处理
      * @param \Throwable $exception
      * @param Response $response
+     * @return Response
      */
-    public function show404(\Throwable $exception, Response $response)
+    public function error404(\Throwable $exception, Response $response): Response
     {
         $content = [
             'code'    => $exception->getCode(),
@@ -28,16 +29,16 @@ class Router extends \Mix\Route\Router
         $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
-            ->withStatus(404)
-            ->send();
+            ->withStatus(404);
     }
 
     /**
      * 500 处理
      * @param \Throwable $exception
      * @param Response $response
+     * @return Response
      */
-    public function show500(\Throwable $exception, Response $response)
+    public function error500(\Throwable $exception, Response $response): Response
     {
         $content = [
             'code'    => $exception->getCode(),
@@ -48,8 +49,7 @@ class Router extends \Mix\Route\Router
         $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
-            ->withStatus(500)
-            ->send();
+            ->withStatus(500);
     }
 
 }
