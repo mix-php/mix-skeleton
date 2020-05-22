@@ -18,6 +18,7 @@
     "php": ">=7.2.0",
     "ext-json": "*",
     "ext-sockets": "*",
+    "ext-pdo": "*",
     "mix/console": "~2.2.0",
     "mix/bean": "~2.2.0",
     "mix/event": "~2.2.0",

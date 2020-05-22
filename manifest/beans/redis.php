@@ -34,7 +34,7 @@ return [
             // 最大连接数
             'maxActive'  => 50,
             // 事件调度器
-            'dispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'dispatcher'],
         ],
     ],
 

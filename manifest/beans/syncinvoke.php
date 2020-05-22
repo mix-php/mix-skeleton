@@ -14,7 +14,7 @@ return [
         // 属性注入
         'properties'      => [
             // 事件调度器
-            'dispatcher' => ['ref' => 'event'],
+            'dispatcher' => ['ref' => 'dispatcher'],
         ],
     ],
 
