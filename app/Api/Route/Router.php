@@ -26,7 +26,7 @@ class Router extends \Mix\Route\Router
             'status'  => '404 Not Found',
         ];
         $body    = (new StreamFactory())->createStream(json_encode($content));
-        $response
+        return $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
             ->withStatus(404);
@@ -46,7 +46,7 @@ class Router extends \Mix\Route\Router
             'status'  => '500 Internal Server Error',
         ];
         $body    = (new StreamFactory())->createStream(json_encode($content));
-        $response
+        return $response
             ->withContentType('application/json', 'utf-8')
             ->withBody($body)
             ->withStatus(500);
