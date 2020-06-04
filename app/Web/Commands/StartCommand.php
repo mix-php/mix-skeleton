@@ -77,12 +77,12 @@ class StartCommand
 
         $this->welcome();
 
-        // 启动服务器
+        // 配置静态文件处理
+        // 此功能较为简易，适合内部系统使用，正式环境请使用 nginx 处理静态文件
         $server = $this->server;
-        $server->set([
-            'document_root'         => app()->basePath . '/public',
-            'enable_static_handler' => false, // 此功能较为简易，请勿在公网环境直接使用，正式环境请使用 nginx 处理静态文件
-        ]);
+        $server->handle('/static/', Server::fileServer(sprintf('%s/public', app()->basePath)));
+
+        // 启动服务器
         $this->logger->info('Server start');
         $server->start($this->router);
     }
