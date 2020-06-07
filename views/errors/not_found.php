@@ -36,11 +36,11 @@
 
 <p><?= $type ?> code <?= $code ?></p>
 <?php if (!empty($file)): ?>
-<p><span><?= $file ?></span> line <span><?= $line ?></span></p>
-<p><?= str_replace("\n", '<br>', $trace); ?></p>
+    <p><span><?= $file ?></span> line <span><?= $line ?></span></p>
+    <p><?= str_replace("\n", '<br>', $trace); ?></p>
 <?php endif; ?>
 
-<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP V2.1</a> —— Single-threaded coroutine PHP framework</span></p>
+<p style="margin-top: 20px;"><span><a href="http://mixphp.cn" target="_blank">MixPHP V<?= \Mix::$version ?></a> —— Single-threaded coroutine PHP microservice framework</span></p>
 
 </body>
 </html>
