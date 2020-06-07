@@ -5,15 +5,16 @@ return [
     // Session
     [
         // 名称
-        'name'       => 'session',
+        'name'            => 'session',
         // 类路径
-        'class'      => \Mix\Session\Session::class,
-        // 初始方法
-        'initMethod' => 'start',
+        'class'           => \Mix\Session\Session::class,
+        // 构造函数注入
+        'constructorArgs' => [
+            // handler
+            ['ref' => \Mix\Session\RedisHandler::class],
+        ],
         // 属性注入
-        'properties' => [
-            // 处理器
-            'handler'        => ['ref' => \Mix\Session\RedisHandler::class],
+        'properties'      => [
             // session键名
             'name'           => 'session_id',
             // 生存时间
@@ -34,13 +35,13 @@ return [
     // Session Redis 处理器
     [
         // 类路径
-        'class'      => \Mix\Session\RedisHandler::class,
-        // 属性注入
-        'properties' => [
+        'class'           => \Mix\Session\RedisHandler::class,
+        // 构造函数注入
+        'constructorArgs' => [
             // redis
-            'redis'     => ['ref' => 'redis'],
+            ['ref' => 'redis'],
             // Key前缀
-            'keyPrefix' => 'SESSION:',
+            'SESSION:',
         ],
     ],
 

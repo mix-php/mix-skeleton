@@ -43,12 +43,10 @@ class SessionMiddleware implements MiddlewareInterface
     {
         $this->request  = $request;
         $this->response = $response;
-        $this->session  = context()->getBean('session', [
-            'request'  => $request,
-            'response' => $response,
-        ]);
+        $this->session  = context()->get('session');
+        $this->session->start($request, $response);
         // 把 Session 放入 Request 的上下文，方便其他位置调用
-        $context = $this->request->getContext();
+        $context          = $this->request->getContext();
         $context->session = $this->session;
     }
 
