@@ -9,7 +9,7 @@ use Mix\Http\Message\Response;
  * Class Router
  * @package App\Web\Route
  */
-class Router extends \Mix\Route\Router
+class Router extends \Mix\FastRoute\Router
 {
 
     /**

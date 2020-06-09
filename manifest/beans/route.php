@@ -13,11 +13,11 @@ return [
             // routeDefinitionCallback
             function (Mix\FastRoute\RouteCollector $collector) {
                 $collector->post('/file/upload',
-                    [\App\Api\Controllers\FileController::class, 'upload']
+                    [\App\Api\Controllers\FileController::class, 'upload'],
                     [\App\Api\Middleware\ActionMiddleware::class]
                 );
                 $collector->get('/curl',
-                    [\App\Api\Controllers\CurlController::class, 'index']
+                    [\App\Api\Controllers\CurlController::class, 'index'],
                     [\App\Api\Middleware\ActionMiddleware::class]
                 );
                 $collector->group('/v2',
@@ -46,11 +46,11 @@ return [
             // routeDefinitionCallback
             function (Mix\FastRoute\RouteCollector $collector) {
                 $collector->get('/',
-                    [\App\Web\Controllers\IndexController::class, 'index']
+                    [\App\Web\Controllers\IndexController::class, 'index'],
                     [\App\Web\Middleware\ActionMiddleware::class]
                 );
                 $collector->get('/profile/{id:\d+}',
-                    [\App\Web\Controllers\ProfileController::class, 'index']
+                    [\App\Web\Controllers\ProfileController::class, 'index'],
                     [\App\Web\Middleware\ActionMiddleware::class]
                 );
             },
@@ -70,7 +70,7 @@ return [
             // routeDefinitionCallback
             function (Mix\FastRoute\RouteCollector $collector) {
                 $collector->get('/websocket',
-                    [\App\WebSocket\Controllers\WebSocketController::class, 'index']
+                    [\App\WebSocket\Controllers\WebSocketController::class, 'index'],
                     [\App\Web\Middleware\ActionMiddleware::class]
                 );
             },
