@@ -34,7 +34,7 @@
     "mix/guzzle": "~2.2.0",
     "mix/auth": "~2.2.0",
     "mix/session": "~2.2.0",
-    "mix/route": "~2.2.0",
+    "mix/fast-route": "~2.2.0",
     "mix/view": "~2.2.0",
     "mix/server": "~2.2.0",
     "mix/http-server": "~2.2.0",

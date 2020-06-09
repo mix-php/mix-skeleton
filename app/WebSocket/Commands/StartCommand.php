@@ -2,12 +2,12 @@
 
 namespace App\WebSocket\Commands;
 
+use App\Web\Route\Router;
 use Mix\Console\CommandLine\Flag;
 use Mix\Helper\ProcessHelper;
 use Mix\Http\Server\Server;
 use Mix\Monolog\Logger;
 use Mix\Monolog\Handler\RotatingFileHandler;
-use Mix\Route\Router;
 use Mix\WebSocket\Upgrader;
 
 /**

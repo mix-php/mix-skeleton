@@ -5,88 +5,77 @@ return [
     // Api路由
     [
         // 名称
-        'name'       => 'apiRouter',
+        'name'            => 'apiRouter',
         // 类路径
-        'class'      => \App\Api\Route\Router::class,
-        // 初始方法
-        'initMethod' => 'parse',
-        // 属性注入
-        'properties' => [
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-            ],
-            // 全局中间件
-            'middleware'     => [\App\Api\Middleware\GlobalMiddleware::class],
-            // 路由规则
-            'rules'          => [
-                // 普通路由
-                'POST /file/upload' => [[\App\Api\Controllers\FileController::class, 'upload'], 'middleware' => [\App\Api\Middleware\ActionMiddleware::class]],
-                '/curl'             => [[\App\Api\Controllers\CurlController::class, 'index'], 'middleware' => [\App\Api\Middleware\ActionMiddleware::class]],
-                // 分组路由
-                '/v2'               => [
-                    // 分组路由规则
-                    [
-                        // 分组路由
-                        'POST /user/create' => [[\App\Api\Controllers\UserController::class, 'create'], 'middleware' => [\App\Api\Middleware\ActionMiddleware::class]],
-                    ],
-                    // 分组中间件
-                    'middleware' => [\App\Api\Middleware\GroupMiddleware::class],
-                ],
-            ],
+        'class'           => \App\Api\Route\Router::class,
+        // 构造函数注入
+        'constructorArgs' => [
+            // routeDefinitionCallback
+            function (Mix\FastRoute\RouteCollector $collector) {
+                $collector->post('/file/upload',
+                    [\App\Api\Controllers\FileController::class, 'upload']
+                    [\App\Api\Middleware\ActionMiddleware::class]
+                );
+                $collector->get('/curl',
+                    [\App\Api\Controllers\CurlController::class, 'index']
+                    [\App\Api\Middleware\ActionMiddleware::class]
+                );
+                $collector->group('/v2',
+                    function (Mix\FastRoute\RouteCollector $collector) {
+                        $collector->post('/user/create',
+                            [\App\Api\Controllers\UserController::class, 'create'],
+                            [\App\Api\Middleware\ActionMiddleware::class]
+                        );
+                    },
+                    [\App\Api\Middleware\GroupMiddleware::class]
+                );
+            },
+            // middleware
+            [\App\Api\Middleware\GlobalMiddleware::class],
         ],
     ],
 
     // Web路由
     [
         // 名称
-        'name'       => 'webRouter',
+        'name'            => 'webRouter',
         // 类路径
-        'class'      => \App\Web\Route\Router::class,
-        // 初始方法
-        'initMethod' => 'parse',
-        // 属性注入
-        'properties' => [
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-                'id' => '\d+',
-            ],
-            // 全局中间件
-            'middleware'     => [\App\Web\Middleware\GlobalMiddleware::class],
-            // 路由规则
-            'rules'          => [
-                // 普通路由
-                '/'             => [[\App\Web\Controllers\IndexController::class, 'index'], 'middleware' => [\App\Web\Middleware\ActionMiddleware::class]],
-                '/profile/{id}' => [[\App\Web\Controllers\ProfileController::class, 'index'], 'middleware' => [\App\Web\Middleware\ActionMiddleware::class]],
-            ],
+        'class'           => \App\Web\Route\Router::class,
+        // 构造函数注入
+        'constructorArgs' => [
+            // routeDefinitionCallback
+            function (Mix\FastRoute\RouteCollector $collector) {
+                $collector->get('/',
+                    [\App\Web\Controllers\IndexController::class, 'index']
+                    [\App\Web\Middleware\ActionMiddleware::class]
+                );
+                $collector->get('/profile/{id:\d+}',
+                    [\App\Web\Controllers\ProfileController::class, 'index']
+                    [\App\Web\Middleware\ActionMiddleware::class]
+                );
+            },
+            // middleware
+            [\App\Web\Middleware\GlobalMiddleware::class],
         ],
     ],
 
     // WebSocket路由
     [
         // 名称
-        'name'       => 'webSocketRouter',
+        'name'            => 'webSocketRouter',
         // 类路径
-        'class'      => \App\Web\Route\Router::class,
-        // 初始方法
-        'initMethod' => 'parse',
-        // 属性注入
-        'properties' => [
-            // 默认变量规则
-            'defaultPattern' => '[\w-]+',
-            // 路由变量规则
-            'patterns'       => [
-            ],
-            // 全局中间件
-            'middleware'     => [\App\Web\Middleware\GlobalMiddleware::class],
-            // 路由规则
-            'rules'          => [
-                // 普通路由
-                '/websocket' => [[\App\WebSocket\Controllers\WebSocketController::class, 'index'], 'middleware' => [\App\Web\Middleware\ActionMiddleware::class]],
-            ],
+        'class'           => \App\Web\Route\Router::class,
+        // 构造函数注入
+        'constructorArgs' => [
+            // routeDefinitionCallback
+            function (Mix\FastRoute\RouteCollector $collector) {
+                $collector->get('/websocket',
+                    [\App\WebSocket\Controllers\WebSocketController::class, 'index']
+                    [\App\Web\Middleware\ActionMiddleware::class]
+                );
+            },
+            // middleware
+            [\App\Web\Middleware\GlobalMiddleware::class],
         ],
     ],
 
