@@ -3,7 +3,7 @@
 namespace App\Common\Listeners;
 
 use Mix\Event\ListenerInterface;
-use Mix\SyncInvoke\Event\InvokedEvent;
+use Mix\SyncInvoke\Event\CalledEvent;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,7 +34,7 @@ class SyncInvokeServerListener implements ListenerInterface
     {
         // 要监听的事件数组，可监听多个事件
         return [
-            InvokedEvent::class,
+            CalledEvent::class,
         ];
     }
 
@@ -45,14 +45,14 @@ class SyncInvokeServerListener implements ListenerInterface
     public function process(object $event)
     {
         // 事件触发后，会执行该方法
-        if (!$event instanceof InvokedEvent) {
+        if (!$event instanceof CalledEvent) {
             return;
         }
         $level   = $event->error ? 'warning' : 'info';
         $message = '{time}|{raw}|{error}';
         $context = [
             'time'  => $event->time,
-            'raw'   => preg_replace('/\s/', '', substr($event->raw, 40, 200)),
+            'raw'   => preg_replace('/\s/', '', substr($event->code, 40, 200)),
             'error' => $event->error,
         ];
         $this->logger->log($level, $message, $context);
