@@ -13,10 +13,10 @@ return [
         // 构造函数注入
         'constructorArgs' => [
             \App\Common\Listeners\CommandListener::class,
-            \App\Common\Listeners\DatabaseListener::class,
-            \App\Common\Listeners\RedisListener::class,
-            \App\Common\Listeners\SyncInvokeServerListener::class,
-            \App\Common\Listeners\HttpServerListener::class,
+            // \App\Common\Listeners\DatabaseListener::class,
+            // \App\Common\Listeners\RedisListener::class,
+            // \App\Common\Listeners\SyncInvokeServerListener::class,
+            // \App\Common\Listeners\HttpServerListener::class,
         ],
     ],
 
