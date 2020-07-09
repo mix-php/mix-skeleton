@@ -2,19 +2,18 @@
 
 namespace App\Console\Workers;
 
-use Mix\Concurrent\CoroutinePool\AbstractWorker;
+use Mix\WorkerPool\AbstractWorker;
 use Swoole\Coroutine\Channel;
 
 /**
- * Class CoroutinePoolDaemonWorker
- * @package Daemon\Libraries
- * @author liu,jian <coder.keda@gmail.com>
+ * Class FooWorker
+ * @package App\Console\Workers
  */
-class CoroutinePoolDaemonWorker extends AbstractWorker
+class FooWorker extends AbstractWorker
 {
 
     /**
-     * CoroutinePoolDaemonWorker constructor.
+     * FooWorker constructor.
      * @param Channel $workerPool
      */
     public function __construct(Channel $workerPool)

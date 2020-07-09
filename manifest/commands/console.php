@@ -22,13 +22,13 @@ return [
     ],
 
     'cp' => [
-        \App\Console\Commands\CoroutinePoolCommand::class,
-        'usage' => "\tCoroutine pool demo",
+        \App\Console\Commands\WorkerPoolCommand::class,
+        'usage' => "\tWorker pool demo",
     ],
 
     'cpd' => [
-        \App\Console\Commands\CoroutinePoolDaemonCommand::class,
-        'usage'   => "\tCoroutine pool daemon demo",
+        \App\Console\Commands\WorkerPoolDaemonCommand::class,
+        'usage'   => "\tWorker pool daemon demo",
         'options' => [
             [['d', 'daemon'], 'usage' => 'Run in the background'],
         ],
