@@ -8,7 +8,7 @@ use App\Udp\Server\Server;
 use Mix\Monolog\Handler\RotatingFileHandler;
 use Mix\Monolog\Logger;
 use Mix\Console\CommandLine\Flag;
-use Mix\Helper\ProcessHelper;
+use Mix\Signal\SignalNotify;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -88,12 +88,13 @@ class StartCommand
         }
 
         // 捕获信号
-        ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], function ($signal) {
+        $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
+        xgo(function () use ($notify) {
+            $signal = $notify->channel()->pop();
             $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
             $this->logger->info('Server shutdown');
             $this->server->shutdown();
-            $this->sendChan->close();
-            ProcessHelper::signal([SIGINT, SIGTERM, SIGQUIT], null);
+            $notify->stop();
         });
 
         $this->welcome();

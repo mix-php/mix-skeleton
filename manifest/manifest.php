@@ -23,8 +23,10 @@ return [
 
     // 协程配置
     'coroutine'   => [
-        true,
-        [
+        // 启用
+        'enable'  => true,
+        // 选项
+        'options' => [
             'max_coroutine' => 300000,
             'hook_flags'    => SWOOLE_HOOK_ALL,
         ],
