@@ -23,7 +23,6 @@
     "mix/bean": "~2.2.0",
     "mix/event": "~2.2.0",
     "mix/runtime": "~2.2.0",
-    "mix/context": "~2.2.0",
     "mix/helper": "~2.2.0",
     "mix/monolog": "~2.2.0",
     "mix/validate": "~2.2.0",
