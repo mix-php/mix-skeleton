@@ -5,7 +5,7 @@ return [
     // 事件调度器
     [
         // 名称
-        'name'            => 'dispatcher',
+        'name'            => 'eventDispatcher',
         // 作用域
         'scope'           => \Mix\Bean\BeanDefinition::SINGLETON,
         // 类路径
