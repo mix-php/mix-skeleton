@@ -13,14 +13,20 @@ return [
         // 构造函数注入
         'constructorArgs' => [
             // 处理器
-            ['ref' => \Mix\Cache\FileHandler::class],
+            ['ref' => \Mix\Cache\Handler\ArrayHandler::class],
         ],
     ],
 
-    // 缓存文件处理器
+    // 内存处理器
     [
         // 类路径
-        'class'           => \Mix\Cache\FileHandler::class,
+        'class' => \Mix\Cache\Handler\ArrayHandler::class,
+    ],
+
+    // 文件处理器
+    [
+        // 类路径
+        'class'           => \Mix\Cache\Handler\FilesystemHandler::class,
         // 构造函数注入
         'constructorArgs' => [
             // 缓存目录
@@ -30,10 +36,10 @@ return [
         ],
     ],
 
-    // 缓存Redis处理器
+    // Redis处理器
     [
         // 类路径
-        'class'           => \Mix\Cache\RedisHandler::class,
+        'class'           => \Mix\Cache\Handler\RedisHandler::class,
         // 构造函数注入
         'constructorArgs' => [
             // redis

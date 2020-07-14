@@ -11,7 +11,7 @@ return [
         // 构造函数注入
         'constructorArgs' => [
             // handler
-            ['ref' => \Mix\Session\RedisHandler::class],
+            ['ref' => \Mix\Session\Handler\RedisHandler::class],
         ],
         // 属性注入
         'properties'      => [
@@ -35,7 +35,7 @@ return [
     // Session Redis 处理器
     [
         // 类路径
-        'class'           => \Mix\Session\RedisHandler::class,
+        'class'           => \Mix\Session\Handler\RedisHandler::class,
         // 构造函数注入
         'constructorArgs' => [
             // redis

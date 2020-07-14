@@ -39,6 +39,7 @@
     "mix/http-server": "~2.2.0",
     "mix/websocket": "~2.2.0",
     "mix/sync-invoke": "~2.2.0",
+    "mix/worker-pool": "~2.2.0",
     "symfony/dotenv": "~4.3",
     "hassankhan/config": "^2.1"
   },
