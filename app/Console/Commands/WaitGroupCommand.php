@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Mix\Concurrent\Sync\WaitGroup;
+use Mix\Sync\WaitGroup;
 
 /**
  * Class WaitGroupCommand
@@ -17,7 +17,7 @@ class WaitGroupCommand
      */
     public function main()
     {
-        $wg = WaitGroup::new();
+        $wg = new WaitGroup();
         for ($i = 0; $i < 2; $i++) {
             $wg->add(1);
             xgo([$this, 'foo'], $wg);

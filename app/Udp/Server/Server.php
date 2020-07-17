@@ -3,7 +3,6 @@
 namespace App\Udp\Server;
 
 use Swoole\Coroutine\Socket;
-use Mix\Concurrent\Coroutine;
 
 /**
  * Class Server
@@ -89,7 +88,7 @@ class Server
             if ($data === false) {
                 continue;
             }
-            Coroutine::create($this->handler, $data, $peer);
+            xgo($this->handler, $data, $peer);
         }
     }
 

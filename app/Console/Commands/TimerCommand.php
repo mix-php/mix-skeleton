@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Mix\Concurrent\Timer;
+use Mix\Time\Time;
 
 /**
  * Class TimerCommand
@@ -18,19 +18,25 @@ class TimerCommand
     public function main()
     {
         // 一次性定时
-        Timer::new()->after(1000, function () {
-            println(time());
+        $timer = Time::newTimer(1000 * Time::MILLISECOND);
+        xgo(function () use ($timer) {
+            $ts = $timer->channel()->pop();
+            println($ts);
         });
 
         // 持续定时
-        $timer = new Timer();
-        $timer->tick(1000, function () {
-            println(time());
-        });
-
-        // 停止定时
-        Timer::new()->after(10000, function () use ($timer) {
-            $timer->clear();
+        $ticker = Time::newTicker(1000 * Time::MILLISECOND);
+        xgo(function () use ($ticker) {
+            $count = 0;
+            while (true) {
+                $ts = $ticker->channel()->pop();
+                if (!$ts || $count == 10) {
+                    $ticker->stop();
+                    return;
+                }
+                println($ts);
+                $count++;
+            }
         });
     }
 
