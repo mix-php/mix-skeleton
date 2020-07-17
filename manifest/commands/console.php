@@ -35,8 +35,8 @@ return [
     ],
 
     'ti' => [
-        \App\Console\Commands\TimerCommand::class,
-        'usage' => "\tTimer demo",
+        \App\Console\Commands\TimeCommand::class,
+        'usage' => "\tTimer and Ticker demo",
     ],
 
 ];
