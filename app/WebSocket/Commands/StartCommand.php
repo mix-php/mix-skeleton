@@ -81,6 +81,7 @@ class StartCommand
             $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
             $this->logger->info('Server shutdown');
             $this->server->shutdown();
+            $this->upgrader->destroy();
             $notify->stop();
         });
 
