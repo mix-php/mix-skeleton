@@ -35,10 +35,14 @@ class CoroutineCommand
      */
     public function foo(Channel $chan)
     {
-        /** @var Database $db */
-        $db     = context()->get('database');
-        $result = $db->prepare('select sleep(5)')->queryAll();
-        $chan->push($result);
+        try {
+            /** @var Database $db */
+            $db     = context()->get('database');
+            $result = $db->prepare('select sleep(5)')->queryAll();
+            $chan->push($result);
+        } catch (\Throwable $exception) {
+            $chan->push($exception);
+        }
     }
 
 }
