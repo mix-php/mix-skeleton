@@ -18,14 +18,14 @@ class TimerCommand
     public function main()
     {
         // 一次性定时
-        $timer = Time::newTimer(1000 * Time::MILLISECOND);
+        $timer = Time::newTimer(1 * Time::SECOND);
         xgo(function () use ($timer) {
             $ts = $timer->channel()->pop();
             println($ts);
         });
 
         // 持续定时
-        $ticker = Time::newTicker(1000 * Time::MILLISECOND);
+        $ticker = Time::newTicker(1 * Time::SECOND);
         xgo(function () use ($ticker) {
             $count = 0;
             while (true) {
