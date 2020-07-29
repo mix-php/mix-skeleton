@@ -1,7 +1,7 @@
 <?php
 
 return function (Mix\FastRoute\RouteCollector $collector) {
-    $collector->get('/',
+    $collector->any('/',
         [\App\Web\Controllers\IndexController::class, 'index'],
         [\App\Web\Middleware\ActionMiddleware::class]
     );
