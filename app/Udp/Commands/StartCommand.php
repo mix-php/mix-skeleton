@@ -54,17 +54,6 @@ class StartCommand
         $this->logger   = context()->get('logger');
         $this->server   = context()->get(Server::class);
         $this->sendChan = new Channel();
-
-        // 实例化控制器
-        foreach ($this->methods as $method => $callback) {
-            list($class, $action) = $callback;
-            $this->methods[$method] = [new $class, $action];
-        }
-
-        // 设置日志处理器
-        $this->logger->withName('UDP');
-        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/udp.log', app()->basePath), 7);
-        $this->logger->pushHandler($handler);
     }
 
     /**
@@ -73,22 +62,10 @@ class StartCommand
      */
     public function main()
     {
-        // 参数重写
-        $addr = Flag::string(['a', 'addr'], '');
-        if ($addr) {
-            $this->server->address = $addr;
-        }
-        $port = Flag::int(['p', 'port'], 0);
-        if ($port) {
-            $this->server->port = $port;
-        }
-        $reusePort = Flag::bool(['r', 'reuse-port'], false);
-        if ($reusePort) {
-            $this->server->reusePort = $reusePort;
-        }
-
         // 捕获信号
-        $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
+        // 文件操作 fopen 等在以下代码的前面执行会导致信号捕获失败
+        // 因此以下代码必须放在最前面，待新版本的 Swoole 解决该问题
+        $notify = new SignalNotify(SIGHUP, SIGINT, SIGTERM);
         xgo(function () use ($notify) {
             $signal = $notify->channel()->pop();
             $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
@@ -97,7 +74,16 @@ class StartCommand
             $notify->stop();
         });
 
-        $this->welcome();
+        // 设置日志处理器
+        $this->logger->withName('UDP');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/udp.log', app()->basePath), 7);
+        $this->logger->pushHandler($handler);
+
+        // 实例化控制器
+        foreach ($this->methods as $method => $callback) {
+            list($class, $action) = $callback;
+            $this->methods[$method] = [new $class, $action];
+        }
 
         // 消息发送
         xgo(function () {
@@ -116,7 +102,22 @@ class StartCommand
             }
         });
 
+        // 参数重写
+        $addr = Flag::string(['a', 'addr'], '');
+        if ($addr) {
+            $this->server->address = $addr;
+        }
+        $port = Flag::int(['p', 'port'], 0);
+        if ($port) {
+            $this->server->port = $port;
+        }
+        $reusePort = Flag::bool(['r', 'reuse-port'], false);
+        if ($reusePort) {
+            $this->server->reusePort = $reusePort;
+        }
+
         // 启动服务器
+        $this->welcome();
         $server = $this->server;
         $server->handle([$this, 'handle']);
         $this->logger->info('Server start');

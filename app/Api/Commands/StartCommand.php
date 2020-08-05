@@ -40,11 +40,6 @@ class StartCommand
         $this->logger = context()->get('logger');
         $this->router = context()->get('apiRouter');
         $this->server = context()->get(Server::class);
-
-        // 设置日志处理器
-        $this->logger->withName('API');
-        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/api.log', app()->basePath), 7);
-        $this->logger->pushHandler($handler);
     }
 
     /**
@@ -53,6 +48,23 @@ class StartCommand
      */
     public function main()
     {
+        // 捕获信号
+        // 文件操作 fopen 等在以下代码的前面执行会导致信号捕获失败
+        // 因此以下代码必须放在最前面，待新版本的 Swoole 解决该问题
+        $notify = new SignalNotify(SIGHUP, SIGINT, SIGTERM);
+        xgo(function () use ($notify) {
+            $signal = $notify->channel()->pop();
+            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('Server shutdown');
+            $this->server->shutdown();
+            $notify->stop();
+        });
+
+        // 设置日志处理器
+        $this->logger->withName('API');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/api.log', app()->basePath), 7);
+        $this->logger->pushHandler($handler);
+
         // 参数重写
         $host = Flag::string(['h', 'host'], '');
         if ($host) {
@@ -67,19 +79,8 @@ class StartCommand
             $this->server->reusePort = $reusePort;
         }
 
-        // 捕获信号
-        $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
-        xgo(function () use ($notify) {
-            $signal = $notify->channel()->pop();
-            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
-            $this->logger->info('Server shutdown');
-            $this->server->shutdown();
-            $notify->stop();
-        });
-
-        $this->welcome();
-
         // 启动服务器
+        $this->welcome();
         $this->logger->info('Server start');
         $this->server->start($this->router);
     }

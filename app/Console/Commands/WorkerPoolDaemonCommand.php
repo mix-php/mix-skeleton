@@ -49,7 +49,7 @@ class WorkerPoolDaemonCommand
     public function main()
     {
         // 捕获信号
-        $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
+        $notify = new SignalNotify(SIGHUP, SIGINT, SIGTERM);
         xgo(function () use ($notify) {
             $notify->channel()->pop();
             $this->quit->push(true);

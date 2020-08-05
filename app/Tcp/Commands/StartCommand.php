@@ -50,17 +50,6 @@ class StartCommand
     {
         $this->logger = context()->get('logger');
         $this->server = context()->get(Server::class);
-
-        // 实例化控制器
-        foreach ($this->methods as $method => $callback) {
-            list($class, $action) = $callback;
-            $this->methods[$method] = [new $class, $action];
-        }
-
-        // 设置日志处理器
-        $this->logger->withName('TCP');
-        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/tcp.log', app()->basePath), 7);
-        $this->logger->pushHandler($handler);
     }
 
     /**
@@ -69,6 +58,29 @@ class StartCommand
      */
     public function main()
     {
+        // 捕获信号
+        // 文件操作 fopen 等在以下代码的前面执行会导致信号捕获失败
+        // 因此以下代码必须放在最前面，待新版本的 Swoole 解决该问题
+        $notify = new SignalNotify(SIGHUP, SIGINT, SIGTERM);
+        xgo(function () use ($notify) {
+            $signal = $notify->channel()->pop();
+            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
+            $this->logger->info('Server shutdown');
+            $this->server->shutdown();
+            $notify->stop();
+        });
+
+        // 设置日志处理器
+        $this->logger->withName('TCP');
+        $handler = new RotatingFileHandler(sprintf('%s/runtime/logs/tcp.log', app()->basePath), 7);
+        $this->logger->pushHandler($handler);
+
+        // 实例化控制器
+        foreach ($this->methods as $method => $callback) {
+            list($class, $action) = $callback;
+            $this->methods[$method] = [new $class, $action];
+        }
+
         // 参数重写
         $host = Flag::string(['h', 'host'], '');
         if ($host) {
@@ -83,19 +95,8 @@ class StartCommand
             $this->server->reusePort = $reusePort;
         }
 
-        // 捕获信号
-        $notify = new SignalNotify(SIGINT, SIGTERM, SIGQUIT);
-        xgo(function () use ($notify) {
-            $signal = $notify->channel()->pop();
-            $this->logger->info('Received signal [{signal}]', ['signal' => $signal]);
-            $this->logger->info('Server shutdown');
-            $this->server->shutdown();
-            $notify->stop();
-        });
-
-        $this->welcome();
-
         // 启动服务器
+        $this->welcome();
         $server = $this->server;
         $server->handle([$this, 'handle']);
         $server->set([
