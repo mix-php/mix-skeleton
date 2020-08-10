@@ -5,7 +5,7 @@ namespace App\Common\Listeners;
 use Mix\Console\CommandLine\Flag;
 use Mix\Console\Event\CommandBeforeExecuteEvent;
 use Mix\Event\ListenerInterface;
-use Mix\Process\Process;
+use Mix\Console\Process;
 
 /**
  * Class CommandListener
