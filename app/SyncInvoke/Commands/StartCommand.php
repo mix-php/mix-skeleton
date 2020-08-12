@@ -43,7 +43,7 @@ class StartCommand
     {
         // 捕获信号
         // 文件操作 fopen 等在以下代码的前面执行会导致信号捕获失败
-        // 因此以下代码必须放在最前面，待新版本的 Swoole 解决该问题
+        // 因此以下代码必须放在最前面，Swoole >= 4.5.3 已经解决该问题
         $notify = new SignalNotify(SIGHUP, SIGINT, SIGTERM);
         xgo(function () use ($notify) {
             $signal = $notify->channel()->pop();
