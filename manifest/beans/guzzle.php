@@ -12,15 +12,9 @@ return [
         'constructorArgs' => [
             // config
             [
-                'handler' => ['ref' => Mix\Guzzle\Handler\StreamHandler::class],
+                'timeout' => 10,
             ],
         ],
-    ],
-
-    // Handler
-    [
-        // 类路径
-        'class' => Mix\Guzzle\Handler\StreamHandler::class,
     ],
 
 ];
