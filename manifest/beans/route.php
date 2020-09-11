@@ -12,7 +12,7 @@ return [
         'constructorArgs' => [
             // routeDefinition
             __DIR__ . '/../../routes/api.php',
-            // middleware
+            // global middleware
             [\App\Api\Middleware\GlobalMiddleware::class],
         ],
     ],
@@ -27,7 +27,7 @@ return [
         'constructorArgs' => [
             // routeDefinition
             __DIR__ . '/../../routes/web.php',
-            // middleware
+            // global middleware
             [\App\Web\Middleware\GlobalMiddleware::class],
         ],
     ],
@@ -42,7 +42,7 @@ return [
         'constructorArgs' => [
             // routeDefinition
             __DIR__ . '/../../routes/websocket.php',
-            // middleware
+            // global middleware
             [\App\Web\Middleware\GlobalMiddleware::class],
         ],
     ],
