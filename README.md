@@ -4,7 +4,7 @@
 
 ## 开发文档
 
-MixPHP 开发指南：http://doc.mixphp.cn
+MixPHP 开发指南：https://openmix.org/mix-php/doc
 
 ## 环境要求
 
