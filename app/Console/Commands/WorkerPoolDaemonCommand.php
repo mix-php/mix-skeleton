@@ -6,7 +6,7 @@ use App\Console\Workers\FooWorker;
 use Mix\Redis\Connection;
 use Mix\Redis\Redis;
 use Mix\Signal\SignalNotify;
-use Mix\WorkerPool\WorkerPoolDispatcher;
+use Mix\WorkerPool\WorkerDispatcher;
 use Swoole\Coroutine\Channel;
 
 /**
@@ -43,8 +43,6 @@ class WorkerPoolDaemonCommand
 
     /**
      * 主函数
-     * @throws \PhpDocReader\AnnotationException
-     * @throws \ReflectionException
      */
     public function main()
     {
@@ -60,28 +58,31 @@ class WorkerPoolDaemonCommand
         $maxWorkers = 20;
         $maxQueue   = 20;
         $jobQueue   = new Channel($maxQueue);
-        $dispatcher = new WorkerPoolDispatcher($jobQueue, $maxWorkers);
-        $dispatcher->start(FooWorker::class);
+        $dispatcher = new WorkerDispatcher($jobQueue, $maxWorkers, FooWorker::class);
 
-        // 投放任务
-        while (true) {
-            if (!$this->quit->isEmpty()) {
-                $dispatcher->stop();
-                return;
+        xgo(function () use ($jobQueue, $dispatcher) {
+            // 投放任务
+            while (true) {
+                if (!$this->quit->isEmpty()) {
+                    $dispatcher->stop();
+                    return;
+                }
+                try {
+                    $data = $this->conn->brPop(['test'], 1);
+                } catch (\Throwable $ex) {
+                    println(sprintf('Error: [%d] %s %s', $ex->getCode(), $ex->getMessage(), get_class($ex)));
+                    $dispatcher->stop();
+                    return;
+                }
+                if (!$data) {
+                    continue;
+                }
+                $data = array_pop($data); // brPop命令最后一个键才是值
+                $jobQueue->push($data);
             }
-            try {
-                $data = $this->conn->brPop(['test'], 3);
-            } catch (\Throwable $ex) {
-                println(sprintf('Error: [%d] %s %s', $ex->getCode(), $ex->getMessage(), get_class($ex)));
-                $dispatcher->stop();
-                return;
-            }
-            if (!$data) {
-                continue;
-            }
-            $data = array_pop($data); // brPop命令最后一个键才是值
-            $jobQueue->push($data);
-        }
+        });
+
+        $dispatcher->run(); // 阻塞代码，直到任务全部执行完成并且全部 Worker 停止
     }
 
 }
